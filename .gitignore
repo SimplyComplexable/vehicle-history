@@ -1,0 +1,6 @@
+.idea/
+
+src/composer.lock
+src/.htacess
+src/config.php
+src/vendor
