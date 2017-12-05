@@ -3,4 +3,11 @@
 src/composer.lock
 src/.htacess
 src/config.php
-src/vendor
+*.json
+composer.lock
+vendor/
+vendor/autoload.php
+vendor/composer/autoload_psr4.php
+vendor/composer/autoload_classmap.php
+vendor/composer/autoload_namespaces.php
+vendor/firebase/php-jwt/LICENSE
