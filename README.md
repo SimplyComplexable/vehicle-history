@@ -13,4 +13,4 @@ The service history page allows users to view all service history/maintenance fo
 ### Fuel Expenses Page
 The fuel page allows users to view all their fuel expenses for the selected vehicle. It also allows them to add fuel expenses, edit existing expenses, and delete expenses.
 ### Parts Page
-The parts page allows users to view all parts that they have installed on the selected vehicle and put in the system. It also allows them to add parts, edit existing parts, and delete parts.
+The parts page allows users to view all parts that they have used on the selected vehicle and put in the system. It also allows them to add parts, edit existing parts, and delete parts.
