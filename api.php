@@ -35,26 +35,26 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
 
     /** USER CLOSURES */
     $handleFullUpdateUser = function ($args) {
-        return (new \Scholarship\Controllers\UserController)->fullUpdateUser($args);
+        return (new \VehicleHistory\Controllers\UserController)->fullUpdateUser($args);
     };
     $handleDeleteUser = function ($args) {
-        return (new \Scholarship\Controllers\UserController)->deleteUser($args);
+        return (new \VehicleHistory\Controllers\UserController)->deleteUser($args);
     };
 
     $handlePartialUpdateUser = function($args) {
-        return (new \Scholarship\Controllers\UserController)->updateUser($args);
+        return (new \VehicleHistory\Controllers\UserController)->updateUser($args);
     };
 
     $handleGetAllStudents = function(){
-        return (new \Scholarship\Controllers\UserController)->getAllStudents();
+        return (new \VehicleHistory\Controllers\UserController)->getAllStudents();
     };
 
     $handleGetUser = function($args){
-        return (new Scholarship\Controllers\UserController)->getUser($args);
+        return (new VehicleHistory\Controllers\UserController)->getUser($args);
     };
 
     $handleAddUser = function(){
-        return (new Scholarship\Controllers\UserController)->addUser();
+        return (new VehicleHistory\Controllers\UserController)->addUser();
     };
 
     /** USER ROUTE */
@@ -81,11 +81,11 @@ $routeInfo = $dispatcher->dispatch($method, $uri);
 
 switch($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
-        http_response_code(Scholarship\Http\StatusCodes::NOT_FOUND);
+        http_response_code(VehicleHistory\Http\StatusCodes::NOT_FOUND);
         //Handle 404
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        http_response_code(Scholarship\Http\StatusCodes::METHOD_NOT_ALLOWED);
+        http_response_code(VehicleHistory\Http\StatusCodes::METHOD_NOT_ALLOWED);
         //Handle 403
         break;
     case FastRoute\Dispatcher::FOUND:

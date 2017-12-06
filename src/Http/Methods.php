@@ -6,7 +6,7 @@
  * Time: 12:26 PM
  */
 
-namespace Scholarship\Http;
+namespace VehicleHistory\Http;
 
 
 class Methods
