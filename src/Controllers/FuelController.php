@@ -8,7 +8,7 @@
 
 namespace VehicleHistory\Controllers;
 
-class FuelController
+class FuelController extends Controller
 {
-
+    protected $viewFileName = 'FuelLog';
 }

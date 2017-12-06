@@ -8,7 +8,7 @@
 
 namespace VehicleHistory\Controllers;
 
-class UsersController
+class UsersController extends Controller
 {
-
+    protected $viewFileName = 'LoginRegister';
 }

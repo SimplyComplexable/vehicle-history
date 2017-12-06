@@ -8,7 +8,7 @@
 
 namespace VehicleHistory\Controllers;
 
-class VehicleController
+class VehicleController extends Controller
 {
-
+    protected $viewFileName = 'Vehicles';
 }
