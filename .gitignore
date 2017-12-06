@@ -1,4 +1,7 @@
 .idea/
+composer.lock
+.htaccess
+config.php
 
 src/composer.lock
 src/.htacess
