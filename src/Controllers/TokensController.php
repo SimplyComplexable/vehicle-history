@@ -6,10 +6,10 @@
  * Time: 12:55 PM
  */
 
-namespace Scholarship\Controllers;
+namespace VehicleHistory\Controllers;
 
-use \Scholarship\Models\Token as Token;
-use \Scholarship\Http\StatusCodes;
+use \VehicleHistory\Models\Token as Token;
+use \VehicleHistory\Http\StatusCodes;
 
 
 class TokensController

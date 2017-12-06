@@ -6,6 +6,8 @@
  * Time: 1:55 PM
  */
 
+namespace VehicleHistory\Controllers;
+
 class VehicleHistoryController
 {
 

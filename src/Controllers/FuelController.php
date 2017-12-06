@@ -6,6 +6,8 @@
  * Time: 1:54 PM
  */
 
+namespace VehicleHistory\Controllers;
+
 class FuelController
 {
 

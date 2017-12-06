@@ -6,6 +6,8 @@
  * Time: 8:08 PM
  */
 
+namespace VehicleHistory\Models;
+
 class Fuel
 {
     private $date;      // date of fill up

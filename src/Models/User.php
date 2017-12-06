@@ -6,6 +6,8 @@
  * Time: 1:39 PM
  */
 
+namespace VehicleHistory\Models;
+
 class User
 {
     private $username;

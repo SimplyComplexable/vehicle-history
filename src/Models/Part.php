@@ -6,6 +6,8 @@
  * Time: 8:22 PM
  */
 
+namespace VehicleHistory\Models;
+
 class Part
 {
     private $part_name;

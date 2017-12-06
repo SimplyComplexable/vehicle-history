@@ -6,7 +6,7 @@ echo "<!DOCTYPE html>
 <head>
     <meta charset='utf-8'>
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css'>
-    <title style=''>Parts | VSHTS</title>
+    <title style=''>Home | VHTS</title>
 </head>
 <body>
 <div class='container-fluid px-0'>
@@ -18,12 +18,8 @@ echo "<!DOCTYPE html>
         </div>
     </nav>
     <div class='mt-4 mx-auto alert alert-success px-4 py-4 ml-4' style='width: 72%'><h2 class='display-4 alert-heading pb-2'>Welcome!</h2>
-        <h3 class='lead'>Please take this survey to help us get to know you better.</h3>
-        <h3 class='lead'>It should take approximately 5-10 minutes.</h3>
-        <h3 class='lead'>As a reward for taking the survey, we will give you a coupon when you are done.</h3></div><div style=''>
-        <input type=\"submit\" name=\"submit\" value=\"Start &raquo;\" class=\"btn btn-primary btn-outline-success my-0\" style='cursor: pointer; margin-left: 18%;'/>
+        <h3 class='lead'>This system/website allows users to track all the service history/maintenance for their vehicle(s). The user will be able to login, add vehicle(s) to their account, input maintenance records (i.e. oil changed, tires rotated, etc.), input fuel receipts, and view all the maintenance records, fuel expenses, and parts.</h3>
     </div>";
-
 
 
 

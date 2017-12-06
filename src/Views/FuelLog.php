@@ -6,7 +6,7 @@ echo "<!DOCTYPE html>
 <head>
     <meta charset='utf-8'>
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css'>
-    <title style=''>Parts | VSHTS</title>
+    <title style=''>Fuel Log | VSHTS</title>
 </head>
 <body>
 <div class='container-fluid px-0'>
@@ -23,8 +23,6 @@ echo "<!DOCTYPE html>
         <h3 class='lead'>As a reward for taking the survey, we will give you a coupon when you are done.</h3></div><div style=''>
         <input type=\"submit\" name=\"submit\" value=\"Start &raquo;\" class=\"btn btn-primary btn-outline-success my-0\" style='cursor: pointer; margin-left: 18%;'/>
     </div>";
-
-
 
 
 echo "</div>

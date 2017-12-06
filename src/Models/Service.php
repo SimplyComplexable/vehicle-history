@@ -6,6 +6,8 @@
  * Time: 8:14 PM
  */
 
+namespace VehicleHistory\Models;
+
 class Service
 {
     private $date;      // date of service

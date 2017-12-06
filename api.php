@@ -9,11 +9,12 @@
 require_once 'config.php';
 require_once 'vendor/autoload.php';
 use VehicleHistory\Http\Methods as Methods;
+use VehicleHistory\Http\StatusCodes as StatusCodes;
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  use ($baseURI) {
     /** TOKENS CLOSURES */
     $handlePostToken = function ($args) {
-        $tokenController = new \Scholarship\Controllers\TokensController();
+        $tokenController = new \VehicleHistory\Controllers\TokensController();
         //Is the data via a form?
         if (!empty($_POST['username'])) {
             $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
@@ -25,7 +26,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
                 $username = filter_var($json->username, FILTER_SANITIZE_STRING);
                 $password = $json->password;
             } else {
-                http_response_code(\Scholarship\Http\StatusCodes::BAD_REQUEST);
+                http_response_code(StatusCodes::BAD_REQUEST);
                 exit();
             }
         }
@@ -35,26 +36,26 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
 
     /** USER CLOSURES */
     $handleFullUpdateUser = function ($args) {
-        return (new \VehicleHistory\Controllers\UserController)->fullUpdateUser($args);
+        return (new \VehicleHistory\Controllers\UsersController)->fullUpdateUser($args);
     };
     $handleDeleteUser = function ($args) {
-        return (new \VehicleHistory\Controllers\UserController)->deleteUser($args);
+        return (new \VehicleHistory\Controllers\UsersController)->deleteUser($args);
     };
 
     $handlePartialUpdateUser = function($args) {
-        return (new \VehicleHistory\Controllers\UserController)->updateUser($args);
+        return (new \VehicleHistory\Controllers\UsersController)->updateUser($args);
     };
 
     $handleGetAllStudents = function(){
-        return (new \VehicleHistory\Controllers\UserController)->getAllStudents();
+        return (new \VehicleHistory\Controllers\UsersController)->getAllStudents();
     };
 
     $handleGetUser = function($args){
-        return (new VehicleHistory\Controllers\UserController)->getUser($args);
+        return (new VehicleHistory\Controllers\UsersController)->getUser($args);
     };
 
     $handleAddUser = function(){
-        return (new VehicleHistory\Controllers\UserController)->addUser();
+        return (new VehicleHistory\Controllers\UsersController)->addUser();
     };
 
     /** USER ROUTE */
