@@ -4,7 +4,7 @@
  * User: iamcaptaincode
  */
 
-namespace Scholarship\Utilities;
+namespace VehicleHistory\Utilities;
 
 
 class DatabaseConnection
