@@ -35,36 +35,46 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
     };
 
     /** USER CLOSURES */
-    $handleFullUpdateUser = function ($args) {
-        return (new \VehicleHistory\Controllers\UsersController)->fullUpdateUser($args);
-    };
-    $handleDeleteUser = function ($args) {
-        return (new \VehicleHistory\Controllers\UsersController)->deleteUser($args);
-    };
-
-    $handlePartialUpdateUser = function($args) {
-        return (new \VehicleHistory\Controllers\UsersController)->updateUser($args);
-    };
-
-    $handleGetAllStudents = function(){
-        return (new \VehicleHistory\Controllers\UsersController)->getAllStudents();
-    };
-
-    $handleGetUser = function($args){
-        return (new VehicleHistory\Controllers\UsersController)->getUser($args);
-    };
-
-    $handleAddUser = function(){
-        return (new VehicleHistory\Controllers\UsersController)->addUser();
-    };
+//    $handleFullUpdateUser = function ($args) {
+//        return (new \VehicleHistory\Controllers\UsersController)->fullUpdateUser($args);
+//    };
+//    $handleDeleteUser = function ($args) {
+//        return (new \VehicleHistory\Controllers\UsersController)->deleteUser($args);
+//    };
+//
+//    $handlePartialUpdateUser = function($args) {
+//        return (new \VehicleHistory\Controllers\UsersController)->updateUser($args);
+//    };
+//
+//    $handleGetAllStudents = function(){
+//        return (new \VehicleHistory\Controllers\UsersController)->getAllStudents();
+//    };
+//
+//    $handleGetUser = function($args){
+//        return (new VehicleHistory\Controllers\UsersController)->getUser($args);
+//    };
+//
+//    $handleAddUser = function(){
+//        return (new VehicleHistory\Controllers\UsersController)->addUser();
+//    };
 
     /** USER ROUTE */
-    $r->addRoute(Methods::PUT, $baseURI.'/users/{id:\d+}', $handleFullUpdateUser);
-    $r->addRoute(Methods::PATCH, $baseURI.'/users/{id:\d+}', $handlePartialUpdateUser);
-    $r->addRoute(Methods::GET, $baseURI.'/users/students', $handleGetAllStudents);
-    $r->addRoute(Methods::GET,$baseURI.'/users/{id:\d+}', $handleGetUser);
-    $r->addRoute(Methods::POST,$baseURI.'/users/', $handleAddUser);
-    $r->addRoute(Methods::DELETE, $baseURI.'/users/{id:\d+}', $handleDeleteUser);
+//    $r->addRoute(Methods::PUT, $baseURI.'/users/{id:\d+}', $handleFullUpdateUser);
+//    $r->addRoute(Methods::PATCH, $baseURI.'/users/{id:\d+}', $handlePartialUpdateUser);
+//    $r->addRoute(Methods::GET, $baseURI.'/users/students', $handleGetAllStudents);
+//    $r->addRoute(Methods::GET,$baseURI.'/users/{id:\d+}', $handleGetUser);
+//    $r->addRoute(Methods::POST,$baseURI.'/users/', $handleAddUser);
+//    $r->addRoute(Methods::DELETE, $baseURI.'/users/{id:\d+}', $handleDeleteUser);
+
+    $handleGetFuelLog = function() {
+        $path = __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'FuelLog.php';
+        ob_start();
+        include($path);
+        $var=ob_get_contents();
+        ob_end_clean();
+        return $var;
+    };
+    $r->addRoute(Methods::GET, $baseURI.'/fuel_log', $handleGetFuelLog);
 });
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -82,6 +92,7 @@ $routeInfo = $dispatcher->dispatch($method, $uri);
 
 switch($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
+        var_dump($routeInfo);
         http_response_code(VehicleHistory\Http\StatusCodes::NOT_FOUND);
         //Handle 404
         break;
@@ -94,7 +105,7 @@ switch($routeInfo[0]) {
         $vars = $routeInfo[2];
 
         $response = $handler($vars);
-        echo json_encode($response);
+//        echo json_encode($response);
         break;
 }
 
