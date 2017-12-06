@@ -3,8 +3,6 @@
 src/composer.lock
 src/.htacess
 src/config.php
-*.json
-composer.lock
 vendor/
 vendor/autoload.php
 vendor/composer/autoload_psr4.php
