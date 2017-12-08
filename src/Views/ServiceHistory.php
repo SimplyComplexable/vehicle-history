@@ -3,28 +3,37 @@
 <head>
     <meta charset='utf-8'>
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css'>
-    <title style=''>Vehicle Service History| VSHTS</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <title>Vehicle Service History| VSHTS</title>
+    <style>
+        .btn{
+            cursor: pointer;
+            font-size: large;
+        }
+    </style>
 </head>
 <body>
-<div class='container-fluid px-0'>
     <nav class='navbar navbar-expand-xl navbar-dark bg-primary sticky-top'>
-        <a href='./Index.php' class='display-4 navbar-brand ml-2' style='font-size: 1.7em;'>Vehicle Service History Tracking System</a>
+        <a href='./' class='display-4 navbar-brand ml-2' style='font-size: 1.7em;'>Vehicle Service History Tracking System</a>
         <div class='float-right text-right'>
-            <a class="text-light btn btn-primary mx-2 my-sm-0" href="./vehicles">Vehicles</a>
-            <a class="text-light btn btn-primary mr-2 my-sm-0 active">Service History</a>
-            <a class="text-light btn btn-primary mr-2 my-sm-0" href="./parts">Parts</a>
-            <a class="text-light btn btn-primary mr-2 my-sm-0" href="./fuel">Fuel Log</a>
+            <a class="btn btn-primary mx-2 my-sm-0" href="./vehicles">Vehicles</a>
+            <a class="btn btn-primary mr-2 my-sm-0 active" href="#">Service History</a>
+            <a class="btn btn-primary mr-2 my-sm-0" href="./fuel">Fuel Log</a>
+            <a class="btn btn-primary mr-2 my-sm-0" href="./parts">Parts</a>
         </div>
     </nav>
-    <div class='mt-4 mx-auto alert alert-success px-4 py-4 ml-4' style='width: 72%'><h2 class='display-4 alert-heading pb-2'>Welcome!</h2>
-        <h3 class='lead'>Please take this survey to help us get to know you better.</h3>
-        <h3 class='lead'>It should take approximately 5-10 minutes.</h3>
-        <h3 class='lead'>As a reward for taking the survey, we will give you a coupon when you are done.</h3></div><div style=''>
-        <input type="submit" name="submit" value="Start &raquo;" class="btn btn-primary btn-outline-success my-0" style='cursor: pointer; margin-left: 18%;'/>
+    <div class='container container-fluid mx-auto mt-4'>
+        <h1 style="font-weight: 400;">Service History for your</h1>
+        <h2 style="font-size: 2em; font-weight: bold">{Selected Vehicle Here}</h2>
+        <hr>
+        <div class='mt-4 mx-auto'>
+            <?php
+
+
+            ?>
+        </div>
     </div>
-
-
-
-</div>
 </body>
 </html>

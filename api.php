@@ -9,6 +9,7 @@
 require_once 'config.php';
 require_once 'vendor/autoload.php';
 use VehicleHistory\Http\Methods;
+use VehicleHistory\Http\StatusCodes;
 use VehicleHistory\Controllers\FuelController;
 use VehicleHistory\Controllers\HomeController;
 use VehicleHistory\Controllers\PartsController;
@@ -64,11 +65,11 @@ $routeInfo = $dispatcher->dispatch($method, $uri);
 switch($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
         var_dump($routeInfo);
-//        http_response_code(VehicleHistory\Http\StatusCodes::NOT_FOUND);
+        http_response_code(StatusCodes::NOT_FOUND);
         //Handle 404
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        http_response_code(VehicleHistory\Http\StatusCodes::METHOD_NOT_ALLOWED);
+        http_response_code(     StatusCodes::METHOD_NOT_ALLOWED);
         //Handle 403
         break;
     case FastRoute\Dispatcher::FOUND:
