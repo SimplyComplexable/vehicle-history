@@ -31,7 +31,7 @@
             text-decoration: none;
         }
         ul{
-            padding: 10px 14px 20px !important;
+            padding: 10px 14px 4px !important;
         }
         .blk{
             color: black;
@@ -53,7 +53,15 @@
     </div>
 </nav>
 <div class='container container-fluid mx-auto mt-5 mb-5 px-4 py-4'>
-    <h1 style="font-weight: 400;">Your Vehicles</h1>
+    <h1 style="font-weight: 400;">Your Vehicles
+        <div class="float-right mr-2">
+            <input type="button" onclick="window.location.href='_blank'" class="btn btn-primary mr-2" value="Service History"/>
+            <input type="button" onclick="window.location.href='_blank'" class="btn btn-info mr-2" value="Fuel Log"/>
+            <input type="button" onclick="window.location.href='_blank'" class="btn btn-dark mr-2" value="Parts"/>
+            <input type="button" id="edit" class="btn btn-success" value="Edit"/>
+            <input type="button" id="delete" class="btn btn-danger" value="Delete"/>
+        </div>
+    </h1>
     <hr>
     <div class='mt-4 mx-auto'>
         <?php
@@ -63,18 +71,10 @@
         <!-- This is just example data until we pull stuff from the db -->
         <div class="list-group list-group-hover">
             <a data-toggle="collapse" id="col" href="#veh1">
-                <div class="list-group-item fntbgr">2017 Ford Focus RS Mk3
-                    <input type="button" onclick="window.location.href='_blank'" class="btn btn-danger float-right" value="Delete"/>
-                    <input type="button" onclick="window.location.href='_blank'" class="btn btn-success float-right mr-2" value="Edit"/>
-                </div>
+                <div class="list-group-item fntbgr">2017 Ford Focus RS Mk3</div>
             </a>
             <div class="panel-collapse collapse" id="veh1">
                 <ul class="list-group">
-                    <li class="list-group-item fntbgr">
-                        <button class="btn btn-primary mr-2">Service History</button>
-                        <button class="btn btn-info mr-2">Fuel Expenses</button>
-                        <button class="btn btn-dark mr-2">Parts</button>
-                    </li>
                     <li class="list-group-item fntbgr blk">Year: <span class="bold">2017</span></li>
                     <li class="list-group-item fntbgr blk">Make: <span class="bold">Ford</span></li>
                     <li class="list-group-item fntbgr blk">Model: <span class="bold">Focus RS Mk3</span></li>
@@ -82,21 +82,16 @@
                     <li class="list-group-item fntbgr blk">License Plate: <span class="bold">SmurfRS</span></li>
                     <li class="list-group-item fntbgr blk">VIN: <span class="bold">1FAFP78824882257</span></li>
                 </ul>
+                <input type="button" id="save" class="btn btn-success ml-4 mt-2 mb-3 invisible" value="Save"/>
+                <input type="button" id="cancel" class="btn btn-warning ml-2 mt-2 mb-3 invisible" value="Cancel"/>
+                <input type="button" id="delete" class="btn btn-danger ml-2 mt-2 mb-3 invisible" value="Delete"/>
             </div>
 
             <a data-toggle="collapse" id="col" href="#veh2">
-                <div class="list-group-item fntbgr">2017 Ford Shelby GT350R
-                    <input type="button" onclick="window.location.href='_blank'" class="btn btn-danger float-right" value="Delete"/>
-                    <input type="button" onclick="window.location.href='_blank'" class="btn btn-success float-right mr-2" value="Edit"/>
-                </div>
+                <div class="list-group-item fntbgr">2017 Ford Shelby GT350R</div>
             </a>
             <div class="panel-collapse collapse" id="veh2">
                 <ul class="list-group">
-                    <li class="list-group-item fntbgr">
-                        <button class="btn btn-primary mr-2">Service History</button>
-                        <button class="btn btn-info mr-2">Fuel Expenses</button>
-                        <button class="btn btn-dark mr-2">Parts</button>
-                    </li>
                     <li class="list-group-item fntbgr blk">Year: <span class="bold">2017</span></li>
                     <li class="list-group-item fntbgr blk">Make: <span class="bold">Ford</span></li>
                     <li class="list-group-item fntbgr blk">Model: <span class="bold">Shelby GT350R</span></li>
@@ -104,21 +99,16 @@
                     <li class="list-group-item fntbgr blk">License Plate: <span class="bold">Smurf350R</span></li>
                     <li class="list-group-item fntbgr blk">VIN: <span class="bold">1FAFP77878678767</span></li>
                 </ul>
+                <input type="button" id="save" class="btn btn-success ml-4 mt-2 mb-3 invisible" value="Save"/>
+                <input type="button" id="cancel" class="btn btn-warning ml-2 mt-2 mb-3 invisible" value="Cancel"/>
+                <input type="button" id="delete" class="btn btn-danger ml-2 mt-2 mb-3 invisible" value="Delete"/>
             </div>
 
             <a data-toggle="collapse" id="col" href="#veh3">
-                <div class="list-group-item fntbgr">2017 Ford Shelby Raptor
-                    <input type="button" onclick="window.location.href='_blank'" class="btn btn-danger float-right" value="Delete"/>
-                    <input type="button" onclick="window.location.href='_blank'" class="btn btn-success float-right mr-2" value="Edit"/>
-                </div>
+                <div class="list-group-item fntbgr">2017 Ford Shelby Raptor</div>
             </a>
             <div class="panel-collapse collapse" id="veh3">
                 <ul class="list-group">
-                    <li class="list-group-item fntbgr">
-                        <button class="btn btn-primary mr-2">Service History</button>
-                        <button class="btn btn-info mr-2">Fuel Expenses</button>
-                        <button class="btn btn-dark mr-2">Parts</button>
-                    </li>
                     <li class="list-group-item fntbgr blk">Year: <span class="bold">2017</span></li>
                     <li class="list-group-item fntbgr blk">Make: <span class="bold">Ford</span></li>
                     <li class="list-group-item fntbgr blk">Model: <span class="bold">Shelby Raptor</span></li>
@@ -126,9 +116,46 @@
                     <li class="list-group-item fntbgr blk">License Plate: <span class="bold">SmurfRaptor</span></li>
                     <li class="list-group-item fntbgr blk">VIN: <span class="bold">1FAFP37687197971</span></li>
                 </ul>
+                <input type="button" id="save" class="btn btn-success ml-4 mt-2 mb-3 invisible" value="Save"/>
+                <input type="button" id="cancel" class="btn btn-warning ml-2 mt-2 mb-3 invisible" value="Cancel"/>
+                <input type="button" id="delete" class="btn btn-danger ml-2 mt-2 mb-3 invisible" value="Delete"/>
             </div>
         </div>
     </div>
 </div>
+<script>
+    window.onload = function (ev) {
+        document.getElementById("edit").addEventListener("click", function(){
+            var allSpans = document.getElementsByTagName('span');
+            Array.from(allSpans).forEach(function (el) {
+                el.setAttribute('contenteditable', 'true');
+                el.classList.add("form-control");
+            });
+
+            var saveBtns = document.getElementsByClassName('invisible');
+            Array.from(saveBtns).forEach(function (el) {
+                el.classList.remove('invisible');
+                el.classList.add('visible');
+            });
+        });
+
+        var invisibleBtns = document.getElementsByClassName("invisible");
+        Array.from(invisibleBtns).forEach(function (el) {
+            el.addEventListener("click", function() {
+                var allSpans = document.getElementsByTagName('span');
+                Array.from(allSpans).forEach(function (el) {
+                    el.setAttribute('contenteditable', 'false');
+                    el.classList.remove("form-control");
+                });
+
+                var saveBtns = document.getElementsByClassName('visible');
+                Array.from(saveBtns).forEach(function (el) {
+                    el.classList.remove('visible');
+                    el.classList.add('invisible');
+                });
+            });
+        })
+    }
+</script>
 </body>
 </html>
