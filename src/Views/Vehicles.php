@@ -53,14 +53,13 @@
     </div>
 </nav>
 <div class='container container-fluid mx-auto mt-5 mb-5 px-4 py-4'>
-    <h1 style="font-weight: 400;">Your Vehicles
-        <div class="float-right mr-2">
-            <input type="button" onclick="window.location.href='_blank'" class="btn btn-primary" value="Service History"/>
-            <input type="button" onclick="window.location.href='_blank'" class="btn btn-info" value="Fuel Log"/>
-            <input type="button" onclick="window.location.href='_blank'" class="btn btn-dark" value="Parts"/>
-            <input type="button" id="edit" class="btn btn-success" value="Edit"/>
-        </div>
-    </h1>
+    <div class="float-right mr-2 mt-2">
+        <input type="button" onclick="window.location.href='_blank'" class="btn btn-primary" value="Service History"/>
+        <input type="button" onclick="window.location.href='_blank'" class="btn btn-info" value="Fuel Log"/>
+        <input type="button" onclick="window.location.href='_blank'" class="btn btn-dark" value="Parts"/>
+        <input type="button" id="edit" class="btn btn-success" value="Edit"/>
+    </div>
+    <h1 style="font-weight: 400;">Your Vehicles</h1>
     <hr>
     <div class='mt-4 mx-auto'>
         <?php
