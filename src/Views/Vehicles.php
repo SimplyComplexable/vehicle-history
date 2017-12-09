@@ -64,13 +64,13 @@
     <div class='mt-4 mx-auto'>
         <!-- This is just example data until we pull stuff from the db -->
         <div class="list-group list-group-hover ">
-            <?php foreach ($vehicles as $vehicle) { ?>
-                <a data-toggle="collapse" id="col" href="#veh1">
+            <?php foreach ($vehicles as $key => $vehicle) { ?>
+                <a data-toggle="collapse" id="col" href="#veh<?php echo $key ?>">
                     <div class="list-group-item fntbgr">
                         <?php echo $vehicle['model_year'] . ' ' . $vehicle['make'] . ' ' . $vehicle['model'] ?>
                     </div>
                 </a>
-                <div class="panel-collapse collapse" id="veh1">
+                <div class="panel-collapse collapse" id="veh<?php echo $key ?>">
                     <ul class="list-group">
                         <li class="list-group-item fntbgr blk">
                             Year: <span class="bold"><?php echo $vehicle['model_year'] ?></span>

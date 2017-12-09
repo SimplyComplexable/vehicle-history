@@ -18,6 +18,7 @@ class Vehicle
     private $color;
     private $licenseplatenumber;
     private $vin;
+    private $db;
 
     public function __construct($model_year, $make, $model, $color = "", $licenseplatenumber = "", $vin = "")
     {
@@ -29,6 +30,10 @@ class Vehicle
         $this->vin = $vin;
 
         $this->initializeDatabase();
+    }
+
+    private function initialzeDatabase() {
+        $this->db = DatabaseConnection::getInstance();
     }
 
 
