@@ -45,8 +45,26 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return $controller->httpResponse();
     };
 
+    $handleAddVehicle = function() {
+        $controller = new VehicleController();
+        $data = $controller->addVehicle($_POST);
+    };
+
+    $handleUpdateVehicle = function($id) {
+        $controller = new VehicleController();
+        return $controller->updateVehicle($id, $_POST);
+    };
+
+    $handleDeleteVehicle = function($id) {
+        $controller = new VehicleController();
+        return $controller->deleteVehicle($id);
+    };
+
     $r->addRoute(Methods::GET, $baseURI, $handleGetHome);
     $r->addRoute(Methods::GET, $baseURI.'/{route}', $handleGet);
+    $r->addRoute(Methods::POST, $baseURI.'/vehicles/add', $handleAddVehicle);
+    $r->addRoute(Methods::POST, $baseURI.'/vehicle/update/{id:\d}', $handleUpdateVehicle);
+    $r->addRoute(Methods::POST, $baseURI.'/vehicle/delete/{id:\d}', $handleDeleteVehicle);
 });
 
 $method = $_SERVER['REQUEST_METHOD'];

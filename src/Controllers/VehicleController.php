@@ -14,16 +14,25 @@ class VehicleController extends Controller
 {
     protected $viewFileName = 'Vehicles';
 
-    public function addVehicle() {
-
+    public function addVehicle($data) {
+        $vehicle = new Vehicle();
+        foreach ($data as $key => $value) {
+            $vehicle->set($key, $value);
+        }
+        $vehicle->save();
     }
 
-    public function updateVehicle() {
-
+    public function updateVehicle($id, $updates) {
+        $vehicle = new Vehicle($id);
+        foreach($updates as $key => $value) {
+            $vehicle->set($key, $value);
+        }
+        $vehicle->save();
     }
 
-    public function deleteVehicle() {
-
+    public function deleteVehicle($id) {
+        $vehicle = new Vehicle($id);
+        $vehicle->delete();
     }
 
     //override Component function which gets called before the page is rendered
