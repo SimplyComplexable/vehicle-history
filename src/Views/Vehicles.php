@@ -62,62 +62,40 @@
     <h1 style="font-weight: 400;">Your Vehicles</h1>
     <hr>
     <div class='mt-4 mx-auto'>
-        <?php
-
-
-        ?>
         <!-- This is just example data until we pull stuff from the db -->
-        <div class="list-group list-group-hover">
-            <a data-toggle="collapse" id="col" href="#veh1">
-                <div class="list-group-item fntbgr">2017 Ford Focus RS Mk3</div>
-            </a>
-            <div class="panel-collapse collapse" id="veh1">
-                <ul class="list-group">
-                    <li class="list-group-item fntbgr blk">Year: <span class="bold">2017</span></li>
-                    <li class="list-group-item fntbgr blk">Make: <span class="bold">Ford</span></li>
-                    <li class="list-group-item fntbgr blk">Model: <span class="bold">Focus RS Mk3</span></li>
-                    <li class="list-group-item fntbgr blk">Color: <span class="bold">Nitrous Blue</span></li>
-                    <li class="list-group-item fntbgr blk">License Plate: <span class="bold">SmurfRS</span></li>
-                    <li class="list-group-item fntbgr blk">VIN: <span class="bold">1FAFP78824882257</span></li>
-                </ul>
-                <input type="button" id="save" class="btn btn-success ml-4 mt-2 mb-3 invisible" value="Save"/>
-                <input type="button" id="cancel" class="btn btn-warning ml-2 mt-2 mb-3 invisible" value="Cancel"/>
-                <input type="button" id="delete" class="btn btn-danger ml-2 mt-2 mb-3 invisible" value="Delete"/>
-            </div>
-
-            <a data-toggle="collapse" id="col" href="#veh2">
-                <div class="list-group-item fntbgr">2017 Ford Shelby GT350R</div>
-            </a>
-            <div class="panel-collapse collapse" id="veh2">
-                <ul class="list-group">
-                    <li class="list-group-item fntbgr blk">Year: <span class="bold">2017</span></li>
-                    <li class="list-group-item fntbgr blk">Make: <span class="bold">Ford</span></li>
-                    <li class="list-group-item fntbgr blk">Model: <span class="bold">Shelby GT350R</span></li>
-                    <li class="list-group-item fntbgr blk">Color: <span class="bold">Grabber Blue</span></li>
-                    <li class="list-group-item fntbgr blk">License Plate: <span class="bold">Smurf350R</span></li>
-                    <li class="list-group-item fntbgr blk">VIN: <span class="bold">1FAFP77878678767</span></li>
-                </ul>
-                <input type="button" id="save" class="btn btn-success ml-4 mt-2 mb-3 invisible" value="Save"/>
-                <input type="button" id="cancel" class="btn btn-warning ml-2 mt-2 mb-3 invisible" value="Cancel"/>
-                <input type="button" id="delete" class="btn btn-danger ml-2 mt-2 mb-3 invisible" value="Delete"/>
-            </div>
-
-            <a data-toggle="collapse" id="col" href="#veh3">
-                <div class="list-group-item fntbgr">2017 Ford Shelby Raptor</div>
-            </a>
-            <div class="panel-collapse collapse" id="veh3">
-                <ul class="list-group">
-                    <li class="list-group-item fntbgr blk">Year: <span class="bold">2017</span></li>
-                    <li class="list-group-item fntbgr blk">Make: <span class="bold">Ford</span></li>
-                    <li class="list-group-item fntbgr blk">Model: <span class="bold">Shelby Raptor</span></li>
-                    <li class="list-group-item fntbgr blk">Color: <span class="bold">Blue Flame Metallic</span></li>
-                    <li class="list-group-item fntbgr blk">License Plate: <span class="bold">SmurfRaptor</span></li>
-                    <li class="list-group-item fntbgr blk">VIN: <span class="bold">1FAFP37687197971</span></li>
-                </ul>
-                <input type="button" id="save" class="btn btn-success ml-4 mt-2 mb-3 invisible" value="Save"/>
-                <input type="button" id="cancel" class="btn btn-warning ml-2 mt-2 mb-3 invisible" value="Cancel"/>
-                <input type="button" id="delete" class="btn btn-danger ml-2 mt-2 mb-3 invisible" value="Delete"/>
-            </div>
+        <div class="list-group list-group-hover ">
+            <?php foreach ($vehicles as $vehicle) { ?>
+                <a data-toggle="collapse" id="col" href="#veh1">
+                    <div class="list-group-item fntbgr">
+                        <?php echo $vehicle['model_year'] . ' ' . $vehicle['make'] . ' ' . $vehicle['model'] ?>
+                    </div>
+                </a>
+                <div class="panel-collapse collapse" id="veh1">
+                    <ul class="list-group">
+                        <li class="list-group-item fntbgr blk">
+                            Year: <span class="bold"><?php echo $vehicle['model_year'] ?></span>
+                        </li>
+                        <li class="list-group-item fntbgr blk">
+                            Make: <span class="bold"><?php echo $vehicle['make'] ?></span>
+                        </li>
+                        <li class="list-group-item fntbgr blk">
+                            Model: <span class="bold"><?php echo $vehicle['model'] ?></span>
+                        </li>
+                        <li class="list-group-item fntbgr blk">
+                            Color: <span class="bold"><?php echo $vehicle['color'] ?></span>
+                        </li>
+                        <li class="list-group-item fntbgr blk">
+                            License Plate: <span class="bold"><?php echo $vehicle['license_plate_number'] ?></span>
+                        </li>
+                        <li class="list-group-item fntbgr blk">
+                            VIN: <span class="bold"><?php echo $vehicle['vin'] ?></span>
+                        </li>
+                    </ul>
+                    <input type="button" id="save" class="btn btn-success ml-4 mt-2 mb-3 invisible" value="Save"/>
+                    <input type="button" id="cancel" class="btn btn-warning ml-2 mt-2 mb-3 invisible" value="Cancel"/>
+                    <input type="button" id="delete" class="btn btn-danger ml-2 mt-2 mb-3 invisible" value="Delete"/>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </div>

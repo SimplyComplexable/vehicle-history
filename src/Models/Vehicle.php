@@ -8,6 +8,8 @@
 
 namespace VehicleHistory\Models;
 
+use VehicleHistory\Utilities\DatabaseConnection;
+
 class Vehicle
 {
     private $model_year;
@@ -17,7 +19,6 @@ class Vehicle
     private $licenseplatenumber;
     private $vin;
 
-
     public function __construct($model_year, $make, $model, $color = "", $licenseplatenumber = "", $vin = "")
     {
         $this->model_year = $model_year;
@@ -26,6 +27,20 @@ class Vehicle
         $this->color = $color;
         $this->licenseplatenumber = $licenseplatenumber;
         $this->vin = $vin;
+
+        $this->initializeDatabase();
+    }
+
+
+    public static function getAll(): array {
+        $db = DatabaseConnection::getInstance();
+        $statement = $db->prepare('SELECT * FROM `vehicles`');
+
+        $statement->setFetchMode(\PDO::FETCH_ASSOC);
+
+        $statement->execute();
+
+        return $statement->fetchAll();
     }
 
     //---------------------------------
