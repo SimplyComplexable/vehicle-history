@@ -59,7 +59,6 @@
             <input type="button" onclick="window.location.href='_blank'" class="btn btn-info" value="Fuel Log"/>
             <input type="button" onclick="window.location.href='_blank'" class="btn btn-dark" value="Parts"/>
             <input type="button" id="edit" class="btn btn-success" value="Edit"/>
-            <input type="button" id="delete" class="btn btn-danger" value="Delete"/>
         </div>
     </h1>
     <hr>
