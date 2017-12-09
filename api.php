@@ -35,6 +35,10 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         }
     };
 
+    $getFileContent = function() {
+        return json_decode(file_get_contents('php://input'));
+    };
+
     $handleGet = function($args) use ($controllerFactory) {
         $controller = $controllerFactory($args['route']);
         return $controller->httpResponse();
@@ -45,26 +49,32 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return $controller->httpResponse();
     };
 
-    $handleAddVehicle = function() {
+    $handleAddVehicle = function() use ($getFileContent) {
         $controller = new VehicleController();
-        $data = $controller->addVehicle($_POST);
+        return json_encode(array(
+            'success' => $controller->addVehicle(get_object_vars($getFileContent()))
+        ));
     };
 
-    $handleUpdateVehicle = function($id) {
+    $handleUpdateVehicle = function($args) use ($getFileContent) {
         $controller = new VehicleController();
-        return $controller->updateVehicle($id, $_POST);
+        return json_encode(array(
+            'success' => $controller->updateVehicle($args['id'], get_object_vars($getFileContent()))
+        ));
     };
 
-    $handleDeleteVehicle = function($id) {
+    $handleDeleteVehicle = function($args) {
         $controller = new VehicleController();
-        return $controller->deleteVehicle($id);
+        return json_encode(array(
+            'success' => $controller->deleteVehicle($args['id'])
+        ));
     };
 
     $r->addRoute(Methods::GET, $baseURI, $handleGetHome);
     $r->addRoute(Methods::GET, $baseURI.'/{route}', $handleGet);
-    $r->addRoute(Methods::POST, $baseURI.'/vehicles/add', $handleAddVehicle);
-    $r->addRoute(Methods::POST, $baseURI.'/vehicle/update/{id:\d}', $handleUpdateVehicle);
-    $r->addRoute(Methods::POST, $baseURI.'/vehicle/delete/{id:\d}', $handleDeleteVehicle);
+    $r->addRoute(Methods::POST, $baseURI.'/vehicles', $handleAddVehicle);
+    $r->addRoute(Methods::PATCH, $baseURI.'/vehicles/{id:\d}', $handleUpdateVehicle);
+    $r->addRoute(Methods::DELETE, $baseURI.'/vehicles/{id:\d}', $handleDeleteVehicle);
 });
 
 $method = $_SERVER['REQUEST_METHOD'];

@@ -10,6 +10,7 @@ namespace VehicleHistory\Models;
 
 class User
 {
+    private $user_id;
     private $username;
     private $password;
 
@@ -18,6 +19,10 @@ class User
     {
         $this->username = $username;
         $this->password = $password;
+    }
+
+    private function contructWithToken() {
+        $this->user_id = 1;
     }
 
     /**

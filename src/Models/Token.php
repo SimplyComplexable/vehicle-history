@@ -26,7 +26,7 @@ class Token
      */
     public $token = "";
 
-    public function buildToken($role, $username)
+    public function buildToken($id, $username)
     {
         $tokenId = uniqid("", true);//TODO: Reset with MCrypt Enabled. //base64_encode(mcrypt_create_iv(32));
         $issuedAt = time();
@@ -40,8 +40,8 @@ class Token
             'nbf' => $notBefore,        // Not before
             'exp' => $expire,           // Expire
             'data' => [                  // Data related to the signer user
-                'role' => $role,
-                'username' => $username, // User name
+                'id' => $id,
+                'username' => $username  // User name
             ]
         ];
 
@@ -70,16 +70,6 @@ class Token
 
         return $tokenData;
     }
-
-    public static function getRoleFromToken($jwt = null)
-    {
-        if ($jwt == null)
-            $jwt = self::getBearerTokenFromHeader();
-        $tokenData = static::extractTokenData($jwt);
-        $data = (array)$tokenData['data'];
-        return $data['role'];
-    }
-
     public static function getUsernameFromToken($jwt = null)
     {
         if ($jwt == null)
@@ -87,6 +77,14 @@ class Token
         $tokenData = static::extractTokenData($jwt);
         $data = (array)$tokenData['data'];
         return $data['username'];
+    }
+    public static function getIDFromToken($jwt = null)
+    {
+        if ($jwt == null)
+            $jwt = self::getBearerTokenFromHeader();
+        $tokenData = static::extractTokenData($jwt);
+        $data = (array)$tokenData['data'];
+        return $data['id'];
     }
 
     private static function getBearerTokenFromHeader()

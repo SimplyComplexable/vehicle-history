@@ -54,84 +54,183 @@
 </nav>
 <div class='container container-fluid mx-auto mt-5 mb-5 px-4 py-4'>
     <div class="float-right mr-2 mt-2">
-        <input type="button" onclick="window.location.href='_blank'" class="btn btn-primary" value="Service History"/>
-        <input type="button" onclick="window.location.href='_blank'" class="btn btn-info" value="Fuel Log"/>
-        <input type="button" onclick="window.location.href='_blank'" class="btn btn-dark" value="Parts"/>
-        <input type="button" id="edit" class="btn btn-success" value="Edit"/>
+        <button type="button" class="btn btn-success add">Add</button>
     </div>
     <h1 style="font-weight: 400;">Your Vehicles</h1>
     <hr>
     <div class='mt-4 mx-auto'>
         <!-- This is just example data until we pull stuff from the db -->
-        <div class="list-group list-group-hover ">
-            <?php foreach ($vehicles as $key => $vehicle) { ?>
-                <a data-toggle="collapse" id="col" href="#veh<?php echo $key ?>">
-                    <div class="list-group-item fntbgr">
-                        <?php echo $vehicle['model_year'] . ' ' . $vehicle['make'] . ' ' . $vehicle['model'] ?>
-                    </div>
-                </a>
-                <div class="panel-collapse collapse" id="veh<?php echo $key ?>">
+        <div class="vehicle">
+            <div class="list-group list-group-hover ">
+                <div class="panel-collapse collapse add-container" style="display:none;">
                     <ul class="list-group">
                         <li class="list-group-item fntbgr blk">
-                            Year: <span class="bold"><?php echo $vehicle['model_year'] ?></span>
+                            Year: <span class="bold form-control" data-field="model_year" contenteditable="true"></span>
                         </li>
                         <li class="list-group-item fntbgr blk">
-                            Make: <span class="bold"><?php echo $vehicle['make'] ?></span>
+                            Make: <span class="bold form-control" data-field="make" contenteditable="true"></span>
                         </li>
                         <li class="list-group-item fntbgr blk">
-                            Model: <span class="bold"><?php echo $vehicle['model'] ?></span>
+                            Model: <span class="bold form-control" data-field="model" contenteditable="true"></span>
                         </li>
                         <li class="list-group-item fntbgr blk">
-                            Color: <span class="bold"><?php echo $vehicle['color'] ?></span>
+                            Color: <span class="bold form-control" data-field="color" contenteditable="true"></span>
                         </li>
                         <li class="list-group-item fntbgr blk">
-                            License Plate: <span class="bold"><?php echo $vehicle['license_plate_number'] ?></span>
+                            License Plate: <span class="bold form-control" data-field="license_plate_number" contenteditable="true"></span>
                         </li>
                         <li class="list-group-item fntbgr blk">
-                            VIN: <span class="bold"><?php echo $vehicle['vin'] ?></span>
+                            VIN: <span class="bold form-control" data-field="vin" contenteditable="true"></span>
                         </li>
                     </ul>
-                    <input type="button" id="save" class="btn btn-success ml-4 mt-2 mb-3 invisible" value="Save"/>
-                    <input type="button" id="cancel" class="btn btn-warning ml-2 mt-2 mb-3 invisible" value="Cancel"/>
-                    <input type="button" id="delete" class="btn btn-danger ml-2 mt-2 mb-3 invisible" value="Delete"/>
+                    <div class="float-right">
+                        <button type="button" class="btn btn-success create">Create</button>
+                        <button type="button" class="btn btn-success cancel-add">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <?php foreach ($vehicles as $key => $vehicle) { ?>
+                <div class="vehicle">
+                    <a data-toggle="collapse" id="col" href="#veh<?php echo $key ?>">
+                        <div class="list-group-item fntbgr">
+                            <?php echo $vehicle['model_year'] . ' ' . $vehicle['make'] . ' ' . $vehicle['model'] ?>
+                        </div>
+                    </a>
+                    <div class="panel-collapse collapse" id="veh<?php echo $key ?>" data-id="<?php echo $vehicle['vehicle_id'] ?>">
+                        <ul class="list-group">
+                            <li class="list-group-item fntbgr blk">
+                                Year: <span class="bold" data-field="model_year"><?php echo $vehicle['model_year'] ?></span>
+                            </li>
+                            <li class="list-group-item fntbgr blk">
+                                Make: <span class="bold" data-field="make"><?php echo $vehicle['make'] ?></span>
+                            </li>
+                            <li class="list-group-item fntbgr blk">
+                                Model: <span class="bold" data-field="model"><?php echo $vehicle['model'] ?></span>
+                            </li>
+                            <li class="list-group-item fntbgr blk">
+                                Color: <span class="bold" data-field="color"><?php echo $vehicle['color'] ?></span>
+                            </li>
+                            <li class="list-group-item fntbgr blk">
+                                License Plate: <span class="bold" data-field="license_plate_number"><?php echo $vehicle['license_plate_number'] ?></span>
+                            </li>
+                            <li class="list-group-item fntbgr blk">
+                                VIN: <span class="bold" data-field="vin"><?php echo $vehicle['vin'] ?></span>
+                            </li>
+                        </ul>
+                        <div class="toggle">
+                            <input type="button" class="btn btn-success edit" value="Edit"/>
+                            <input type="button" onclick="window.location.href='_blank'" class="btn btn-primary" value="Service History"/>
+                            <input type="button" onclick="window.location.href='_blank'" class="btn btn-info" value="Fuel Log"/>
+                            <input type="button" onclick="window.location.href='_blank'" class="btn btn-dark" value="Parts"/>
+                        </div>
+                        <div class="toggle" style="display:none;">
+                            <button type="button" class="btn btn-success ml-4 mt-2 mb-3 save" data-id="<?php echo $vehicle['vehicle_id'] ?>">
+                                Save
+                            </button>
+                            <button type="button" class="btn btn-warning ml-2 mt-2 mb-3 cancel" data-id="<?php echo $vehicle['vehicle_id'] ?>">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn btn-danger ml-2 mt-2 mb-3 delete" data-id="<?php echo $vehicle['vehicle_id'] ?>">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
                 </div>
             <?php } ?>
         </div>
     </div>
 </div>
 <script>
-    window.onload = function (ev) {
-        document.getElementById("edit").addEventListener("click", function(){
-            var allSpans = document.getElementsByTagName('span');
-            Array.from(allSpans).forEach(function (el) {
-                el.setAttribute('contenteditable', 'true');
-                el.classList.add("form-control");
+    (function () {
+
+        const toggleInputs = $panel => {
+            $panel.find('span').each(function (i, el) {
+                console.log();
+                el.setAttribute('contenteditable', $(el).prop('contenteditable') !== 'true');
+                el.classList.toggle("form-control");
+            });
+            $panel.find('.toggle').toggle();
+        }
+
+        const updateVehicle = e => {
+            const target = e.target;
+            const $parent = $(target).parents('.vehicle');
+            const data = {};
+            $parent.find('span[data-field]').each((i, el) => {
+                data[el.dataset.field] = el.innerText;
             });
 
-            var saveBtns = document.getElementsByClassName('invisible');
-            Array.from(saveBtns).forEach(function (el) {
-                el.classList.remove('invisible');
-                el.classList.add('visible');
+            fetch(`vehicles/${target.dataset.id}`, {
+                method: 'PATCH',
+                body: JSON.stringify(data)
+            })
+                .then(data => data.json())
+                .then(data => {
+                    toggleInputs($parent);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        };
+
+        const deleteVehicle = e => {
+            const target = e.target;
+            const $parent = $(target).parents('.vehicle');
+
+            fetch(`vehicles/${target.dataset.id}`, {
+                method: 'DELETE'
+            })
+                .then(data => data.json())
+                .then(data => {
+                    if (data.success) {
+                        $parent.remove();
+                    }
+                })
+
+        };
+
+        const toggleAddSection = e => {
+            $('.add-container').toggle();
+            $('.add').html($('.add').html() === 'Cancel' ? 'Add' : 'Cancel');
+        };
+
+        const createVehicle = e => {
+            const target = e.target;
+            const $parent = $(target).parents('.vehicle');
+            const data = {};
+            $parent.find('span[data-field]').each((i, el) => {
+                data[el.dataset.field] = el.innerText;
             });
+
+            console.log(data);
+
+            fetch(`vehicles`, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+                .then(data => data.json())
+                .then(data => {
+                    toggleInputs($parent);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        }
+
+        $('.create').on('click', createVehicle);
+
+        $('.add').on('click', toggleAddSection);
+        $('.cancel-add').on('click', toggleAddSection);
+
+        $('.save').on('click', updateVehicle);
+        $('.delete').on('click', deleteVehicle);
+
+        $('.edit').on("click", function (e) {
+            const $parent = $(e.target).parents('.vehicle');
+            toggleInputs($parent);
         });
-
-        var invisibleBtns = document.getElementsByClassName("invisible");
-        Array.from(invisibleBtns).forEach(function (el) {
-            el.addEventListener("click", function() {
-                var allSpans = document.getElementsByTagName('span');
-                Array.from(allSpans).forEach(function (el) {
-                    el.setAttribute('contenteditable', 'false');
-                    el.classList.remove("form-control");
-                });
-
-                var saveBtns = document.getElementsByClassName('visible');
-                Array.from(saveBtns).forEach(function (el) {
-                    el.classList.remove('visible');
-                    el.classList.add('invisible');
-                });
-            });
-        })
-    }
+    })();
 </script>
 </body>
 </html>
