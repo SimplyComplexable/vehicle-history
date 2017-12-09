@@ -55,9 +55,9 @@
 <div class='container container-fluid mx-auto mt-5 mb-5 px-4 py-4'>
     <h1 style="font-weight: 400;">Your Vehicles
         <div class="float-right mr-2">
-            <input type="button" onclick="window.location.href='_blank'" class="btn btn-primary mr-2" value="Service History"/>
-            <input type="button" onclick="window.location.href='_blank'" class="btn btn-info mr-2" value="Fuel Log"/>
-            <input type="button" onclick="window.location.href='_blank'" class="btn btn-dark mr-2" value="Parts"/>
+            <input type="button" onclick="window.location.href='_blank'" class="btn btn-primary" value="Service History"/>
+            <input type="button" onclick="window.location.href='_blank'" class="btn btn-info" value="Fuel Log"/>
+            <input type="button" onclick="window.location.href='_blank'" class="btn btn-dark" value="Parts"/>
             <input type="button" id="edit" class="btn btn-success" value="Edit"/>
             <input type="button" id="delete" class="btn btn-danger" value="Delete"/>
         </div>
