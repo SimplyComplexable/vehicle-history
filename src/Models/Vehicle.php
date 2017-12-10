@@ -66,11 +66,10 @@ class Vehicle
     public static function getAll(): array {
         $db = DatabaseConnection::getInstance();
         $statement = $db->prepare('SELECT * FROM `vehicles`');
-
         $statement->setFetchMode(\PDO::FETCH_ASSOC);
 
         $statement->execute();
-
+//        var_dump($statement->fetchAll());
         return $statement->fetchAll();
     }
 
@@ -81,9 +80,10 @@ class Vehicle
     }
 
     public function save() {
-        if ($this->vehicle_id === null) {
+        if ($this->vehicle_id === null || $this->vehicle_id === '') {
             return $this->create();
         }
+
         return $this->update();
     }
 
@@ -103,7 +103,12 @@ class Vehicle
         $statement->bindParam(':vin', $this->vin);
         $statement->bindValue(':user_id', 1);
 
-        return $statement->execute();
+        if ($statement->execute()) {
+            return array(
+                'success' => true,
+                'id' => $this->db->lastInsertId()
+            );
+        }
     }
 
     public function update() {
@@ -126,7 +131,9 @@ class Vehicle
         $statement->bindParam(':vin', $this->vin);
         $statement->bindParam(':vehicle_id', $this->vehicle_id);
 
-        return $statement->execute();
+        return array(
+            'success' => $statement->execute()
+        );
     }
 
     public function delete() {
@@ -137,7 +144,9 @@ class Vehicle
         ');
 
         $statement->bindParam(':vehicle_id', $this->vehicle_id);
-        return $statement->execute();
+        return array(
+            'success' => $statement->execute()
+        );
     }
 
     //---------------------------------

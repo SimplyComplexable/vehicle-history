@@ -23,6 +23,7 @@ class VehicleController extends Controller
         foreach ($data as $key => $value) {
             $vehicle->set($key, $value);
         }
+
         return $vehicle->save();
     }
 
