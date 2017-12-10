@@ -55,7 +55,7 @@
     </nav>
     <div class='container container-fluid mx-auto mt-5 mb-5 px-4 py-4'>
         <div class="float-right mr-2 mt-2">
-            <button type="button" class="btn btn-success add">Add</button>
+            <button type="button" class="btn btn-success add">Add Vehicle</button>
         </div>
         <h1 style="font-weight: 400;">Your Vehicles</h1>
         <hr>
