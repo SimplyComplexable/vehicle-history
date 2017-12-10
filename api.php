@@ -56,23 +56,17 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
 
     $handleAddVehicle = function() use ($getFileContent) {
         $controller = new VehicleController();
-        return json_encode(array(
-            'success' => $controller->addVehicle(get_object_vars($getFileContent()))
-        ));
+        return json_encode($controller->addVehicle(get_object_vars($getFileContent())));
     };
 
     $handleUpdateVehicle = function($args) use ($getFileContent) {
         $controller = new VehicleController();
-        return json_encode(array(
-            'success' => $controller->updateVehicle($args['id'], get_object_vars($getFileContent()))
-        ));
+        return json_encode($controller->updateVehicle($args['id'], get_object_vars($getFileContent())));
     };
 
     $handleDeleteVehicle = function($args) {
         $controller = new VehicleController();
-        return json_encode(array(
-            'success' => $controller->deleteVehicle($args['id'])
-        ));
+        return json_encode($controller->deleteVehicle($args['id']));
     };
 
     $vehicleApiEndpoint = $baseURI.'/api/vehicles';

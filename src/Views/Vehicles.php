@@ -53,14 +53,7 @@
             <a class="btn btn-primary mr-2 my-sm-0" href="./parts">Parts</a>
         </div>
     </nav>
-    <div class='container container-fluid mx-auto mt-5 mb-5 px-4 py-4'>
-        <div class="float-right mr-2 mt-2">
-            <button type="button" class="btn btn-success add">Add Vehicle</button>
-        </div>
-        <h1 style="font-weight: 400;">Your Vehicles</h1>
-        <hr>
-        <div id="vehicles"></div>
-    </div>
+    <div id="vehicles"></div>
 <script>
     'use strict';
 
@@ -88,14 +81,36 @@
             .then(data => data.json());
     };
 
+    const addVehicle = (data) => {
+        return fetch(`${apiURI}`, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+            .then(data => data.json());
+    };
+
 
     /** Example classful component */
     class Vehicles extends Component {
+        static getDefaultValue() {
+            return {
+                vehicle_id: '',
+                model_year: '',
+                make: '',
+                model: '',
+                color: '',
+                license_plate_number: '',
+                vin: '',
+                editing: true
+            }
+        };
+
         constructor() {
             super();
             this.state = {
                 vehicles: [],
-                edits: null
+                edits: null,
+                newVehicle: null
             };
         }
 
@@ -145,6 +160,9 @@
         handleDeleteVehicle(id) {
             deleteVehicle(id)
                 .then(data => {
+                    if (!data.success) {
+                        return false;
+                    }
                     this.setState(prevState => {
                         const vehicles = prevState.vehicles.filter(vehicle => vehicle.vehicle_id !== id);
                         return {
@@ -162,6 +180,45 @@
                     edits
                 };
             })
+        }
+
+        handleToggleNewVehicle() {
+            this.setState(prevState => {
+                if (prevState.newVehicle == null) {
+                    return {
+                        newVehicle: Vehicles.getDefaultValue()
+                    };
+                }
+                return {
+                    newVehicle: null
+                };
+            });
+        }
+
+        handleAddVehicle() {
+            addVehicle(this.state.newVehicle)
+                .then(response => {
+                    if (response.success) {
+                        this.setState(prevState => {
+                            const vehicles = [...prevState.vehicles];
+                            const newVehicle = {...prevState.newVehicle};
+                            newVehicle.editing = false;
+                            newVehicle.vehicle_id = response.id;
+                            vehicles.push(newVehicle);
+                            return { vehicles, newVehicle: null };
+                        });
+                    }
+                })
+        }
+
+        handleUpdateNewEdits(field, value) {
+            this.setState(prevState => {
+                const newVehicle = { ...prevState.newVehicle };
+                newVehicle[field] = value;
+                return {
+                    newVehicle
+                };
+            });
         }
 
         componentDidMount() {
@@ -185,11 +242,31 @@
                 handleSaveVehicle: this.handleSaveVehicle.bind(this),
                 handleDeleteVehicle: this.handleDeleteVehicle.bind(this),
                 handleCancelVehicle: this.handleCancelVehicle.bind(this),
-                handleUpdateEdits: this.handleUpdateEdits.bind(this)
+                handleUpdateEdits: this.handleUpdateEdits.bind(this),
             }));
+            const newVehicle = state.newVehicle !== null ? h(Vehicle, {
+                vehicle: state.newVehicle,
+                edits: this.state.edits,
+                handleEditVehicle: this.handleEditVehicle.bind(this),
+                handleSaveVehicle: this.handleAddVehicle.bind(this),
+                handleDeleteVehicle: this.handleToggleNewVehicle.bind(this),
+                handleCancelVehicle: this.handleToggleNewVehicle.bind(this),
+                handleUpdateEdits: this.handleUpdateNewEdits.bind(this),
+            }) : null;
 
             return (
-                h('div', {class: 'mt-4 mx-auto'}, vehicleList)
+                h('div', { class: 'container container-fluid mx-auto mt-5 mb-5 px-4 py-4'},[
+                    h('div', { class: 'float-right mr-2 mt-2'},
+                        h('button', { type: 'button',
+                            class: 'btn btn-success add',
+                            onClick: this.handleToggleNewVehicle.bind(this)
+                        }, state.newVehicle === null ? 'Add Vehicle' : 'Cancel')
+                    ),
+                    h('h1', { style: 'font-weight: 400px;'}, 'Your Vehicles'),
+                    h('hr'),
+                    newVehicle,
+                    h('div', {class: 'mt-4 mx-auto'}, vehicleList)
+                ])
             );
         }
     }
@@ -224,14 +301,19 @@
             vin,
             editing
         } = edits && edits.vehicle_id === vehicle.vehicle_id ? edits : vehicle;
-        const saveVehicle = () => handleSaveVehicle(vehicle_id, edits);
+        const
+        const saveVehicle = () => {
+            if (validateInputs()) {
+                handleSaveVehicle(vehicle_id, edits);
+            }
+        };
         return (
-            h('div', { class: 'panel-collapse collapse', id: `veh-${vehicle_id}`, 'data-id': vehicle_id }, [
+            h('div', { class: `panel-collapse collapse ${ editing ? 'show': ''}`, id: `veh-${vehicle_id}`, 'data-id': vehicle_id }, [
                 h('ul', { class: 'list-group' }, [
-                    h(VehicleDetail, { title: 'Year', field: 'model_year', value: model_year, editing, handleUpdateEdits }),
-                    h(VehicleDetail, { title: 'Make', field: 'make', value: make, editing, handleUpdateEdits }),
-                    h(VehicleDetail, { title: 'Model', field: 'model', value: model, editing, handleUpdateEdits }),
-                    h(VehicleDetail, { title: 'Color', field: 'color', value: color, editing, handleUpdateEdits }),
+                    h(VehicleDetail, { title: 'Year', field: 'model_year', value: model_year, editing, handleUpdateEdits, }),
+                    h(VehicleDetail, { title: 'Make', field: 'make', value: make, editing, handleUpdateEdits, }),
+                    h(VehicleDetail, { title: 'Model', field: 'model', value: model, editing, handleUpdateEdits, }),
+                    h(VehicleDetail, { title: 'Color', field: 'color', value: color, editing, handleUpdateEdits, }),
                     h(VehicleDetail, { title: 'License Plate', field: 'license_plate_number', value: license_plate_number, editing, handleUpdateEdits }),
                     h(VehicleDetail, { title: 'VIN', field: 'vin', value: vin, editing, handleUpdateEdits }),
                 ]),
@@ -239,6 +321,11 @@
             ])
         )
     };
+
+    // const validators = {
+    //     required: value => !!value,
+    //     number: value => !num
+    // };
 
     const VehicleDetail = ({ title, field, value, editing, handleUpdateEdits }) => {
         let content;
