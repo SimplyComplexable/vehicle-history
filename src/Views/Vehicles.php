@@ -245,7 +245,7 @@
         if (!editing) {
             content = h('span', {class: 'bold', 'data-field': field}, value);
         } else {
-            content = h('input', { class: 'form-control', 'data-field': field, value, onChange: e => handleUpdateEdits(field, e.target.value) });
+            content = h('input', { class: 'form-control bold', 'data-field': field, value, onChange: e => handleUpdateEdits(field, e.target.value) });
         }
         return (
             h('li', { class: 'list-group-item fntbgr blk' }, [
@@ -256,22 +256,22 @@
     };
 
     const ButtonContainer = ({ vehicle_id, editing, handleEditVehicle, saveVehicle, handleDeleteVehicle, handleCancelVehicle }) => {
-        const classList = 'btn btn-success ml-4 mt-2 mb-3 ';
+        const classList = 'btn btn-success ml-4 mt-2 mb-3';
         if (editing) {
             return (
                 h('div', {class: 'toggle'}, [
-                    h('button', { class: classList, onClick: () => saveVehicle() }, 'Save'),
-                    h('button', { class: classList, onClick: () => handleCancelVehicle(vehicle_id) }, 'Cancel'),
-                    h('button', { class: classList, onClick: () => handleDeleteVehicle(vehicle_id) }, 'Delete'),
+                    h('button', { class: 'btn btn-success ml-4 mt-2 mb-3', onClick: () => saveVehicle() }, 'Save'),
+                    h('button', { class: 'btn btn-warning ml-2 mt-2 mb-3', onClick: () => handleCancelVehicle(vehicle_id) }, 'Cancel'),
+                    h('button', { class: 'btn btn-danger ml-2 mt-2 mb-3', onClick: () => handleDeleteVehicle(vehicle_id) }, 'Delete'),
                 ])
             );
         } else {
             return (
                 h('div', null, [
-                    h('button', { type: 'button', class: 'btn btn-success', onClick: () => handleEditVehicle(vehicle_id) }, 'Edit'),
-                    h('button', { type: 'button', class: 'btn btn-primary' }, 'Survey History'),
-                    h('button', { type: 'button', class: 'btn btn-info' }, 'Fuel Log'),
-                    h('button', { type: 'button', class: 'btn btn-dark' }, 'Parts'),
+                    h('button', { type: 'button', class: 'btn btn-success mb-3 mt-2 ml-4', onClick: () => handleEditVehicle(vehicle_id) }, 'Edit'),
+                    h('button', { type: 'button', class: 'btn btn-primary mt-2 mb-3 ml-2' }, 'Service History'),
+                    h('button', { type: 'button', class: 'btn btn-info mt-2 mb-3 ml-2' }, 'Fuel Log'),
+                    h('button', { type: 'button', class: 'btn btn-dark mt-2 mb-3 ml-2' }, 'Parts'),
                 ])
             )
         }
