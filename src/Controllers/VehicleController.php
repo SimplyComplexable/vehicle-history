@@ -14,6 +14,10 @@ class VehicleController extends Controller
 {
     protected $viewFileName = 'Vehicles';
 
+    public function getAll() {
+        return Vehicle::getAll();
+    }
+
     public function addVehicle(array $data) {
         $vehicle = new Vehicle();
         foreach ($data as $key => $value) {

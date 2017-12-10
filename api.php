@@ -49,6 +49,11 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return $controller->httpResponse();
     };
 
+    $handleGetAllVehicles = function() {
+        $controller = new VehicleController();
+        return json_encode($controller->getAll());
+    };
+
     $handleAddVehicle = function() use ($getFileContent) {
         $controller = new VehicleController();
         return json_encode(array(
@@ -70,11 +75,14 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         ));
     };
 
+    $vehicleApiEndpoint = $baseURI.'/api/vehicles';
+
     $r->addRoute(Methods::GET, $baseURI, $handleGetHome);
     $r->addRoute(Methods::GET, $baseURI.'/{route}', $handleGet);
-    $r->addRoute(Methods::POST, $baseURI.'/vehicles', $handleAddVehicle);
-    $r->addRoute(Methods::PATCH, $baseURI.'/vehicles/{id:\d}', $handleUpdateVehicle);
-    $r->addRoute(Methods::DELETE, $baseURI.'/vehicles/{id:\d}', $handleDeleteVehicle);
+    $r->addRoute(Methods::GET, $vehicleApiEndpoint, $handleGetAllVehicles);
+    $r->addRoute(Methods::POST, $vehicleApiEndpoint, $handleAddVehicle);
+    $r->addRoute(Methods::PATCH, $vehicleApiEndpoint.'/{id:\d+}', $handleUpdateVehicle);
+    $r->addRoute(Methods::DELETE, $vehicleApiEndpoint.'/{id:\d+}', $handleDeleteVehicle);
 });
 
 $method = $_SERVER['REQUEST_METHOD'];
