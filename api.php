@@ -98,9 +98,16 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return json_encode($controller->deleteService($args['id']));
     };
 
+    $handleLogin = function() {
+        $controller = new UsersController();
+        return $controller->login($_POST);
+    };
+
     $vehicleApiEndpoint = $baseURI.'/api/vehicles';
     $servicesApiEndpoint = $vehicleApiEndpoint. '/{vehicle_id:\d+}/history';
 
+
+    // api routes
     $r->addRoute(Methods::GET, $servicesApiEndpoint, $handleGetAllServices);
     $r->addRoute(Methods::POST, $servicesApiEndpoint, $handleAddService);
     $r->addRoute(Methods::PATCH, $servicesApiEndpoint.'/{id:\d+}', $handleUpdateService);
@@ -109,9 +116,15 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
     $r->addRoute(Methods::POST, $vehicleApiEndpoint, $handleAddVehicle);
     $r->addRoute(Methods::PATCH, $vehicleApiEndpoint.'/{id:\d+}', $handleUpdateVehicle);
     $r->addRoute(Methods::DELETE, $vehicleApiEndpoint.'/{id:\d+}', $handleDeleteVehicle);
+
+    // page routes
     $r->addRoute(Methods::GET, $baseURI, $handleGetHome);
     $r->addRoute(Methods::GET, $baseURI.'/{route}', $handleGet);
     $r->addRoute(Methods::GET, $baseURI.'/vehicles/{vehicle_id:\d+}/history', $getHistoryContent);
+
+    // login form routes
+    $r->addRoute(Methods::POST, $baseURI.'/login', $handleLogin);
+
 });
 
 $method = $_SERVER['REQUEST_METHOD'];

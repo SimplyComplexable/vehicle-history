@@ -11,4 +11,8 @@ namespace VehicleHistory\Controllers;
 class UsersController extends Controller
 {
     protected $viewFileName = 'LoginRegister';
+
+    public function login($data) {
+        var_dump($data);
+    }
 }
