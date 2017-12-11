@@ -83,17 +83,35 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return json_encode($controller->getAll());
     };
 
-    $vehicleApiEndpoint = $baseURI.'/api/vehicles';
-    $servicesApiEndpoint = $vehicleApiEndpoint. '/{vehicle_id:\d}/history';
+    $handleAddService = function ($args) use ($getFileContent) {
+        $controller = new ServiceHistoryController($args['vehicle_id']);
+        return json_encode($controller->addService(get_object_vars($getFileContent())));
+    };
 
-    $r->addRoute(Methods::GET, $baseURI, $handleGetHome);
-    $r->addRoute(Methods::GET, $baseURI.'/{route}', $handleGet);
-    $r->addRoute(Methods::GET, $baseURI.'/vehicles/{vehicle_id:\d+}/history', $getHistoryContent);
+    $handleUpdateService = function ($args) use ($getFileContent) {
+        $controller = new ServiceHistoryController($args['vehicle_id']);
+        return json_encode($controller->updateService($args['id'], get_object_vars($getFileContent())));
+    };
+
+    $handleDeleteService = function ($args) use ($getFileContent) {
+        $controller = new ServiceHistoryController($args['vehicle_id']);
+        return json_encode($controller->deleteService($args['id']));
+    };
+
+    $vehicleApiEndpoint = $baseURI.'/api/vehicles';
+    $servicesApiEndpoint = $vehicleApiEndpoint. '/{vehicle_id:\d+}/history';
+
+    $r->addRoute(Methods::GET, $servicesApiEndpoint, $handleGetAllServices);
+    $r->addRoute(Methods::POST, $servicesApiEndpoint, $handleAddService);
+    $r->addRoute(Methods::PATCH, $servicesApiEndpoint.'/{id:\d+}', $handleUpdateService);
+    $r->addRoute(Methods::DELETE, $servicesApiEndpoint.'/{id:\d+}', $handleDeleteService);
     $r->addRoute(Methods::GET, $vehicleApiEndpoint, $handleGetAllVehicles);
     $r->addRoute(Methods::POST, $vehicleApiEndpoint, $handleAddVehicle);
     $r->addRoute(Methods::PATCH, $vehicleApiEndpoint.'/{id:\d+}', $handleUpdateVehicle);
     $r->addRoute(Methods::DELETE, $vehicleApiEndpoint.'/{id:\d+}', $handleDeleteVehicle);
-    $r->addRoute(Methods::GET, $servicesApiEndpoint, $handleGetAllServices);
+    $r->addRoute(Methods::GET, $baseURI, $handleGetHome);
+    $r->addRoute(Methods::GET, $baseURI.'/{route}', $handleGet);
+    $r->addRoute(Methods::GET, $baseURI.'/vehicles/{vehicle_id:\d+}/history', $getHistoryContent);
 });
 
 $method = $_SERVER['REQUEST_METHOD'];

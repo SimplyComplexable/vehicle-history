@@ -9,6 +9,7 @@
 namespace VehicleHistory\Controllers;
 
 use VehicleHistory\Models\Service;
+use VehicleHistory\Models\Vehicle;
 
 class ServiceHistoryController extends Controller
 {
@@ -20,9 +21,33 @@ class ServiceHistoryController extends Controller
         $this->vehicle_id = $id;
     }
 
+    public function addService(array $data) {
+        $vehicle = new Service();
+        foreach ($data as $key => $value) {
+            $vehicle->set($key, $value);
+        }
+
+        return $vehicle->save();
+    }
+
+    public function updateService(int $id, array $updates) {
+        $service = new Service($id);
+        foreach($updates as $key => $value) {
+            $service->set($key, $value);
+        }
+        return $service->save();
+    }
+
+    public function deleteService(int $id) {
+        $service = new Service($id);
+        return $service->delete();
+    }
+
     protected function beforeRender() {
+        $service = new Vehicle($this->vehicle_id);
         $this->setVars(array(
-            'vehicle_id' => $this->vehicle_id
+            'vehicle_id' => $this->vehicle_id,
+            'vehicle_title' => $service->getModelYear() . ' ' . $service->getMake() . ' ' . $service->getModel()
         ));
     }
 

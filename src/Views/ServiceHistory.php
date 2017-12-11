@@ -112,33 +112,36 @@
                 cost: '',
                 location: '',
                 editing: true
-            }
+            };
         };
 
         constructor() {
             super();
             this.state = {
                 services: [],
-                newService: null
+                newService: null,
+                filter: _ => true
             };
         }
 
         handleSaveService(service, newService) {
-            updateService(service.vehicle_id, newService)
+            updateService(service.service_id, newService)
                 .then(data => {
                     if (!data.success) {
                         return false;
                     }
                     this.setState(prevState => {
                         const services = prevState.services.map(s => {
-                            if (s.vehicle_id === newService.vehicle_id) {
+                            if (s.service_id === newService.service_id) {
+                                console.log(newService);
                                 return newService;
                             }
                             return s;
                         });
                         return { services };
                     });
-                });
+                })
+                .catch(err => console.error(err));
         }
 
         handleDeleteService(id) {
@@ -153,7 +156,8 @@
                             services
                         };
                     })
-                });
+                })
+                .catch(err => console.error(err));
         }
 
         handleToggleNewService() {
@@ -170,6 +174,7 @@
         }
 
         handleAddService(service, data) {
+            data['vehicle_id'] = <?php echo $vehicle_id ?>;
             addService(data)
                 .then(response => {
                     if (response.success) {
@@ -183,6 +188,13 @@
                         });
                     }
                 })
+                .catch(err => console.error(err));;
+        }
+
+        handleUpdateFilter(filter) {
+            this.setState({
+                filter
+            });
         }
 
         componentDidMount() {
@@ -198,14 +210,16 @@
         }
 
 
-        render(props, state) {
-            const serviceList = this.state.services.map(service => h(Service, {
-                service,
-                handleSaveService: this.handleSaveService.bind(this),
-                handleDeleteService: this.handleDeleteService.bind(this)
-            }));
-            const newService = state.newService !== null ? h(Service, {
-                service: state.newService,
+        render(props, { newService, filter }) {
+            const serviceList = this.state.services
+                .filter(filter)
+                .map(service => h(Service, {
+                    service,
+                    handleSaveService: this.handleSaveService.bind(this),
+                    handleDeleteService: this.handleDeleteService.bind(this)
+                }));
+            const newServiceComponent = newService !== null ? h(Service, {
+                service: newService,
                 handleSaveService: this.handleAddService.bind(this),
                 handleDeleteService: this.handleToggleNewService.bind(this)
             }) : null;
@@ -213,19 +227,71 @@
             return (
                 h('div', { class: 'container container-fluid mx-auto mt-5 mb-5 px-4 py-4'},[
                     h('div', { class: 'float-right mr-2 mt-2'},
-                        h('button', { type: 'button',
+                        h('button', {
+                            type: 'button',
                             class: 'btn btn-success add',
                             onClick: this.handleToggleNewService.bind(this)
-                        }, state.newService === null ? 'Add Service' : 'Cancel')
+                        }, newService === null ? 'Add Service' : 'Cancel')
                     ),
-                    h('h1', { style: 'font-weight: 400px;'}, 'Your Services'),
+                    h('h1', { style: 'font-weight: 400px;'}, '<?php echo $vehicle_title ?> Services'),
+                    h(Filter, {
+                        handleUpdateFilter: this.handleUpdateFilter.bind(this),
+                        filter
+                    }),
                     h('hr'),
-                    newService,
+                    newServiceComponent,
                     h('div', {class: 'mt-4 mx-auto'}, serviceList)
                 ])
             );
         }
     }
+
+    const Filter = ({ handleUpdateFilter, filter: defaultFilter }) => {
+        const filterByName = e => {
+            const value = e.target.value;
+            handleUpdateFilter(service => {
+                if (value === '') {
+                    return defaultFilter
+                }
+                return service.service.substr(0, value.length).toLowerCase() === value.toLowerCase();
+            })
+        };
+        const filterByYear = e => {
+            const value = e.target.value;
+            handleUpdateFilter(service => {
+                if (value === '') {
+                    return defaultFilter
+                }
+                const date = new Date(service.date);
+                return date.getFullYear().toString().substr(0, value.length).toLowerCase() === value.toLowerCase();
+            })
+        };
+        const filterByLocation = e => {
+            const value = e.target.value;
+            handleUpdateFilter(service => {
+                if (value === '') {
+                    return defaultFilter
+                }
+                return service.location.substr(0, value.length).toLowerCase() === value.toLowerCase();
+            })
+        };
+        return (
+            h('div', { class: 'row' }, [
+                h('div', { class: 'col-md-4'}, [
+                    h('div', null, 'Name'),
+                    h('input', { type: 'text', onKeyUp: filterByName })
+                ]),
+                h('div', { class: 'col-md-4'}, [
+                    h('div', null, 'Year'),
+                    h('input', { type: 'text', onKeyUp: filterByYear })
+                ]),
+                h('div', { class: 'col-md-4'}, [
+                    h('div', null, 'Location'),
+                    h('input', { type: 'text', onKeyUp: filterByLocation })
+                ]),
+            ])
+        );
+    };
 
     const Service = ({ service, handleSaveService, handleDeleteService }) => {
         return (
@@ -239,11 +305,15 @@
     const ServiceLink = ({ service }) => {
         const {
             service_id,
+            date,
+            location,
             service: service_title,
         } = service;
+        const formattedDate = formatDate(new Date(date));
+        const title = `${service_title} at ${location} on ${formattedDate}`;
         return (
-            h('a', { id: 'col', href: `#veh-${service_id}`, 'data-toggle': 'collapse' },
-                h('div', { class: 'list-group-item fntbgr'}, service_title)
+            h('a', { id: 'col', href: `#ser-${service_id}`, 'data-toggle': 'collapse' },
+                h('div', { class: 'list-group-item fntbgr'}, title)
             )
         );
     };
@@ -299,7 +369,6 @@
             this.setState(prevState => {
                 const errorMessages = { ...prevState.errorMessages };
                 const edits = {...prevState.edits};
-
                 const isValid = input.validity.valid;
                 if (isValid) {
                     input.classList.remove('error');
@@ -308,6 +377,7 @@
                 }
                 errorMessages[field] = input.validationMessage;
                 edits[field] = input.value;
+                console.log(edits);
 
                 return {
                     errorMessages,
@@ -337,11 +407,14 @@
                 cost,
                 location
             } = editing ? edits : service;
+            if (editing) {
+                console.log(edits);
+            }
 
             return (
                 h('div', {
                     class: `panel-collapse collapse ${newService ? 'show' : ''}`,
-                    id: `veh-${service_id}`,
+                    id: `ser-${service_id}`,
                 }, [
                     h('ul', {class: 'list-group'}, [
                         h(ServiceDetail, {
@@ -367,7 +440,9 @@
                             field: 'odometer',
                             value: odometer,
                             editing,
-                            type: 'text',
+                            type: 'number',
+                            min: 0,
+                            max: 1000000,
                             errorMessage: errorMessages['odometer'],
                             onChange: this.onChange.bind(this)
                         }),
@@ -376,7 +451,10 @@
                             field: 'cost',
                             value: cost,
                             editing,
-                            type: 'text',
+                            type: 'money',
+                            min: '0.01',
+                            step: '0.01',
+                            max: '100000',
                             errorMessage: errorMessages['cost'],
                             onChange: this.onChange.bind(this)
                         }),
@@ -404,21 +482,55 @@
         }
     }
 
+    const formatDate = (date = null) => {
+        if (date === null) {
+            date = new Date();
+        } else if (!(date instanceof Date)) {
+            date = new Date(date);
+        }
+        const print = number => number > 9 ? number : '0' + number;
+        return `${print(date.getMonth() + 1)}/${print(date.getDate() + 1)}/${date.getFullYear()}`;
+    };
 
-    const ServiceDetail = ({ title, field, value, editing, type, min, max, onChange, errorMessage }) => {
+    const formatNumber = number => {
+        return number.split('').reverse().reduce((next, n, i) => {
+            if (i !== 0 && i % 3 === 0) {
+                return n + ',' + next;
+            }
+            return n + next;
+        }, '')
+    };
+
+    const ServiceDetail = ({ title, field, value, editing, type, min, max, step, onChange, errorMessage }) => {
         const errorSpan = errorMessage ? (
             h('span', { class: 'error' }, errorMessage)
         ) : null;
 
+        let formattedValue = value;
+
+        switch (type) {
+            case 'date':
+                formattedValue = formatDate(value);
+                break;
+            case 'money':
+                formattedValue = `$${value}`;
+                type = 'number';
+                break;
+            case 'number':
+                formattedValue = formatNumber(value);
+                break;
+        }
+
         let content;
         if (!editing) {
-            content = h('span', { class: 'bold' }, value);
+            content = h('span', { class: 'bold' }, formattedValue);
         } else {
             content = h('input', {
                 class: 'form-control bold',
                 value,
                 type,
                 min,
+                step,
                 max,
                 required: 'required',
                 onChange: e => onChange(field, e.target),});
@@ -438,16 +550,13 @@
                 h('div', {class: 'toggle'}, [
                     h('button', { class: 'btn btn-success ml-4 mt-2 mb-3', disabled: !isValid, onClick: handleSaveService }, 'Save'),
                     h('button', { class: 'btn btn-warning ml-2 mt-2 mb-3', onClick: handleCancelService }, 'Cancel'),
-                    h('button', { class: 'btn btn-danger ml-2 mt-2 mb-3', onClick: () => handleDeleteService(service_id) }, 'Delete'),
                 ])
             );
         } else {
             return (
                 h('div', null, [
                     h('button', { type: 'button', class: 'btn btn-success mb-3 mt-2 ml-4', onClick: () => handleEditService(service_id) }, 'Edit'),
-                    h('button', { type: 'button', class: 'btn btn-primary mt-2 mb-3 ml-2' }, 'Service History'),
-                    h('button', { type: 'button', class: 'btn btn-info mt-2 mb-3 ml-2' }, 'Fuel Log'),
-                    h('button', { type: 'button', class: 'btn btn-dark mt-2 mb-3 ml-2' }, 'Parts'),
+                    h('button', { class: 'btn btn-danger ml-2 mt-2 mb-3', onClick: () => handleDeleteService(service_id) }, 'Delete')
                 ])
             )
         }
