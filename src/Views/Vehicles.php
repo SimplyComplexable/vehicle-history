@@ -62,14 +62,7 @@
             <a class="btn btn-primary mr-2 my-sm-0" href="./parts">Parts</a>
         </div>
     </nav>
-    <div class='container container-fluid mx-auto mt-5 mb-5 px-4 py-4'>
-        <div class="float-right mr-2 mt-2">
-            <button type="button" class="btn btn-success add">Add Vehicle</button>
-        </div>
-        <h1 style="font-weight: 400;">Your Vehicles</h1>
-        <hr>
-        <div id="vehicles"></div>
-    </div>
+    <div id="vehicles"></div>
 <script>
     'use strict';
 
@@ -126,9 +119,20 @@
             super();
             this.state = {
                 vehicles: [],
-                edits: null,
                 newVehicle: null
             };
+        }
+
+        componentDidMount() {
+            getVehicles()
+                .then(vehicles => {
+                    this.setState({
+                        vehicles
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                });
         }
 
         handleSaveVehicle(vehicle, newVehicle) {
@@ -144,7 +148,7 @@
                             }
                             return v;
                         });
-                        return { vehicles, edits: null };
+                        return { vehicles };
                     });
                 });
         }
@@ -166,7 +170,7 @@
 
         handleToggleNewVehicle() {
             this.setState(prevState => {
-                if (prevState.newVehicle == null) {
+                if (prevState.newService == null) {
                     return {
                         newVehicle: Vehicles.getDefaultValue()
                     };
@@ -193,37 +197,14 @@
                 })
         }
 
-        handleUpdateNewEdits(field, value) {
-            this.setState(prevState => {
-                const newVehicle = { ...prevState.newVehicle };
-                newVehicle[field] = value;
-                return {
-                    newVehicle
-                };
-            });
-        }
-
-        componentDidMount() {
-            getVehicles()
-                .then(vehicles => {
-                    this.setState({
-                        vehicles
-                    });
-                })
-                .catch(err => {
-                    console.error(err);
-                });
-        }
-
-
-        render(props, state) {
-            const vehicleList = this.state.vehicles.map(vehicle => h(Vehicle, {
+        render(props, { vehicles, newVehicle }) {
+            const vehicleList = vehicles.map(vehicle => h(Vehicle, {
                 vehicle,
                 handleSaveVehicle: this.handleSaveVehicle.bind(this),
                 handleDeleteVehicle: this.handleDeleteVehicle.bind(this)
             }));
-            const newVehicle = state.newVehicle !== null ? h(Vehicle, {
-                vehicle: state.newVehicle,
+            const newVehicleComponent = newVehicle !== null ? h(Vehicle, {
+                vehicle: newVehicle,
                 handleSaveVehicle: this.handleAddVehicle.bind(this),
                 handleDeleteVehicle: this.handleToggleNewVehicle.bind(this)
             }) : null;
@@ -234,11 +215,11 @@
                         h('button', { type: 'button',
                             class: 'btn btn-success add',
                             onClick: this.handleToggleNewVehicle.bind(this)
-                        }, state.newVehicle === null ? 'Add Vehicle' : 'Cancel')
+                        }, newVehicle === null ? 'Add Vehicle' : 'Cancel')
                     ),
                     h('h1', { style: 'font-weight: 400px;'}, 'Your Vehicles'),
                     h('hr'),
-                    newVehicle,
+                    newVehicleComponent,
                     h('div', {class: 'mt-4 mx-auto'}, vehicleList)
                 ])
             );
@@ -264,16 +245,6 @@
         );
     };
 
-    const validateInput = input => {
-        if (input.checkValidity()) {
-            input.classList.remove('error');
-            return true;
-        }
-
-        input.classList.add('error');
-        return false;
-    };
-
     class VehiclePanel extends Component {
         constructor() {
             super();
@@ -288,28 +259,35 @@
                 },
                 edits: null,
                 editing: false,
-                isValid: true
+                isValid: true,
+                newVehicle: false
             };
-            this.inputs = [];
         }
 
         componentDidMount() {
-            const editing = this.props.vehicle.editing == true;
+            const newVehicle = this.props.vehicle.editing == true;
+            const editing = newVehicle;
+            const isValid = newVehicle ? false : true;
             const edits = editing ? { ...this.props.vehicle } : null;
             this.setState({
+                edits,
                 editing,
-                edits
+                isValid,
+                newVehicle
             });
         }
 
-        handleEditVehicle(id) {
-            this.setState(prevState => {
-                const edits = {...this.props.vehicle};
-                return { edits, editing: true };
+        handleEditVehicle() {
+            this.setState({
+                edits: {...this.props.vehicle},
+                editing: true
             });
         }
 
         handleCancelVehicle() {
+            if (this.state.newService) {
+                return this.props.handleDeleteService();
+            }
             this.setState({ edits: null, editing: false });
         }
 
@@ -338,12 +316,15 @@
         saveVehicle() {
             if (this.state.isValid) {
                 this.props.handleSaveVehicle(this.props.vehicle, this.state.edits);
+                this.setState({
+                    editing: false
+                });
             }
         }
 
 
         render({ vehicle, handleDeleteVehicle },
-               { errorMessages, isValid, editing, edits }) {
+               { errorMessages, isValid, newVehicle, editing, edits }) {
             const {
                 vehicle_id,
                 model_year,
@@ -356,7 +337,7 @@
 
             return (
                 h('div', {
-                    class: `panel-collapse collapse`,
+                    class: `panel-collapse collapse ${newVehicle ? 'show' : ''}`,
                     id: `veh-${vehicle_id}`,
                     'data-id': vehicle_id
                 }, [
@@ -425,7 +406,7 @@
                         saveVehicle: this.saveVehicle.bind(this),
                         handleDeleteVehicle,
                         handleCancelVehicle: this.handleCancelVehicle.bind(this)
-                    },)
+                    })
                 ])
             )
         }
@@ -460,7 +441,6 @@
     };
 
     const ButtonContainer = ({ vehicle_id, editing, isValid, handleEditVehicle, saveVehicle, handleDeleteVehicle, handleCancelVehicle }) => {
-        const classList = 'btn btn-success ml-4 mt-2 mb-3';
         if (editing) {
             return (
                 h('div', {class: 'toggle'}, [

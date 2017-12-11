@@ -27,27 +27,31 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
                 return new PartsController();
             case 'vehicles':
                 return new VehicleController();
-            case 'history':
-                return new ServiceHistoryController();
             case 'login':
             case 'register':
                 return new UsersController();
+            default:
+                break;
         }
     };
 
     $getFileContent = function() {
         return json_decode(file_get_contents('php://input'));
     };
-
     $handleGet = function($args) use ($controllerFactory) {
         $controller = $controllerFactory($args['route']);
-        return $controller->httpResponse();
+        if ($controller !== null) {
+            return $controller->httpResponse();
+        }
+        http_response_code(StatusCodes::NOT_FOUND);
     };
 
     $handleGetHome = function() {
         $controller = new HomeController();
         return $controller->httpResponse();
     };
+
+
 
     $handleGetAllVehicles = function() {
         $controller = new VehicleController();
@@ -69,14 +73,27 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return json_encode($controller->deleteVehicle($args['id']));
     };
 
+    $getHistoryContent = function($args) {
+        $controller = new ServiceHistoryController($args['vehicle_id']);
+        return $controller->httpResponse();
+    };
+
+    $handleGetAllServices = function ($args) {
+        $controller = new ServiceHistoryController($args['vehicle_id']);
+        return json_encode($controller->getAll());
+    };
+
     $vehicleApiEndpoint = $baseURI.'/api/vehicles';
+    $servicesApiEndpoint = $vehicleApiEndpoint. '/{vehicle_id:\d}/history';
 
     $r->addRoute(Methods::GET, $baseURI, $handleGetHome);
     $r->addRoute(Methods::GET, $baseURI.'/{route}', $handleGet);
+    $r->addRoute(Methods::GET, $baseURI.'/vehicles/{vehicle_id:\d+}/history', $getHistoryContent);
     $r->addRoute(Methods::GET, $vehicleApiEndpoint, $handleGetAllVehicles);
     $r->addRoute(Methods::POST, $vehicleApiEndpoint, $handleAddVehicle);
     $r->addRoute(Methods::PATCH, $vehicleApiEndpoint.'/{id:\d+}', $handleUpdateVehicle);
     $r->addRoute(Methods::DELETE, $vehicleApiEndpoint.'/{id:\d+}', $handleDeleteVehicle);
+    $r->addRoute(Methods::GET, $servicesApiEndpoint, $handleGetAllServices);
 });
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -94,7 +111,6 @@ $routeInfo = $dispatcher->dispatch($method, $uri);
 
 switch($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
-        var_dump($routeInfo);
         http_response_code(StatusCodes::NOT_FOUND);
         //Handle 404
         break;

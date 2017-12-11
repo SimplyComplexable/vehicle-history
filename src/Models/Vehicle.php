@@ -69,7 +69,6 @@ class Vehicle
         $statement->setFetchMode(\PDO::FETCH_ASSOC);
 
         $statement->execute();
-//        var_dump($statement->fetchAll());
         return $statement->fetchAll();
     }
 

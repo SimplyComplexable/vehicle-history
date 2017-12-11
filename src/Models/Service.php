@@ -8,6 +8,8 @@
 
 namespace VehicleHistory\Models;
 
+use VehicleHistory\Utilities\DatabaseConnection;
+
 class Service
 {
     private $date;      // date of service
@@ -24,6 +26,16 @@ class Service
         $this->odometer = $odometer;
         $this->cost = $cost;
         $this->location = $location;
+    }
+
+    public static function getAllForVehicle($vehicle_id): array {
+        $db = DatabaseConnection::getInstance();
+        $statement = $db->prepare('SELECT * FROM `service` WHERE `vehicle_id` = :vehicle_id');
+        $statement->bindParam(':vehicle_id', $vehicle_id);
+        $statement->setFetchMode(\PDO::FETCH_ASSOC);
+
+        $statement->execute();
+        return $statement->fetchAll();
     }
 
     /**
