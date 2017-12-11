@@ -454,8 +454,8 @@
                 h('div', null, [
                     h('button', { type: 'button', class: 'btn btn-success mb-3 mt-2 ml-4', onClick: () => handleEditVehicle(vehicle_id) }, 'Edit'),
                     h('a', { class: 'btn btn-primary mt-2 mb-3 ml-2', href: `./vehicles/${vehicle_id}/history` }, 'Service History'),
-                    h('a', { class: 'btn btn-info mt-2 mb-3 ml-2' }, 'Fuel Log'),
-                    h('a', { class: 'btn btn-dark mt-2 mb-3 ml-2' }, 'Parts'),
+                    h('a', { class: 'btn btn-info mt-2 mb-3 ml-2', href: '' }, 'Fuel Log'),
+                    h('a', { class: 'btn btn-dark mt-2 mb-3 ml-2', href: '' }, 'Parts'),
                 ])
             )
         }
