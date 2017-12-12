@@ -73,11 +73,6 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return json_encode($controller->deleteVehicle($args['id']));
     };
 
-    $getHistoryContent = function($args) {
-        $controller = new ServiceHistoryController($args['vehicle_id']);
-        return $controller->httpResponse();
-    };
-
     $handleGetAllServices = function ($args) {
         $controller = new ServiceHistoryController($args['vehicle_id']);
         return json_encode($controller->getAll());
@@ -97,6 +92,38 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         $controller = new ServiceHistoryController($args['vehicle_id']);
         return json_encode($controller->deleteService($args['id']));
     };
+
+    $handleGetAllFuels = function ($args) {
+        $controller = new FuelController($args['vehicle_id']);
+        return json_encode($controller->getAll());
+    };
+
+    $handleAddFuel = function ($args) use ($getFileContent) {
+        $controller = new FuelController($args['vehicle_id']);
+        return json_encode($controller->addFuel(get_object_vars($getFileContent())));
+    };
+
+    $handleUpdateFuel = function ($args) use ($getFileContent) {
+        $controller = new FuelController($args['vehicle_id']);
+        return json_encode($controller->updateFuel($args['id'], get_object_vars($getFileContent())));
+    };
+
+    $handleDeleteFuel = function ($args) use ($getFileContent) {
+        $controller = new FuelController($args['vehicle_id']);
+        return json_encode($controller->deleteFuel($args['id']));
+    };
+
+
+    $getHistoryContent = function($args) {
+        $controller = new ServiceHistoryController($args['vehicle_id']);
+        return $controller->httpResponse();
+    };
+
+    $getFuelContent = function($args) {
+        $controller = new FuelController($args['vehicle_id']);
+        return $controller->httpResponse();
+    };
+
 
     $handleLogin = function() use ($baseURI) {
         $controller = new UsersController();
@@ -120,6 +147,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
 
     $vehicleApiEndpoint = $baseURI.'/api/vehicles';
     $servicesApiEndpoint = $vehicleApiEndpoint. '/{vehicle_id:\d+}/history';
+    $fuelsApiEndpoint = $vehicleApiEndpoint. '/{vehicle_id:\d+}/fuel';
 
 
     // api routes
@@ -127,15 +155,22 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
     $r->addRoute(Methods::POST, $servicesApiEndpoint, $handleAddService);
     $r->addRoute(Methods::PATCH, $servicesApiEndpoint.'/{id:\d+}', $handleUpdateService);
     $r->addRoute(Methods::DELETE, $servicesApiEndpoint.'/{id:\d+}', $handleDeleteService);
+
     $r->addRoute(Methods::GET, $vehicleApiEndpoint, $handleGetAllVehicles);
     $r->addRoute(Methods::POST, $vehicleApiEndpoint, $handleAddVehicle);
     $r->addRoute(Methods::PATCH, $vehicleApiEndpoint.'/{id:\d+}', $handleUpdateVehicle);
     $r->addRoute(Methods::DELETE, $vehicleApiEndpoint.'/{id:\d+}', $handleDeleteVehicle);
 
+    $r->addRoute(Methods::GET, $fuelsApiEndpoint, $handleGetAllFuels);
+    $r->addRoute(Methods::POST, $fuelsApiEndpoint, $handleAddFuel);
+    $r->addRoute(Methods::PATCH, $fuelsApiEndpoint.'/{id:\d+}', $handleUpdateFuel);
+    $r->addRoute(Methods::DELETE, $fuelsApiEndpoint.'/{id:\d+}', $handleDeleteFuel);
+
     // page routes
     $r->addRoute(Methods::GET, $baseURI, $handleGetHome);
     $r->addRoute(Methods::GET, $baseURI.'/{route}', $handleGet);
     $r->addRoute(Methods::GET, $baseURI.'/vehicles/{vehicle_id:\d+}/history', $getHistoryContent);
+    $r->addRoute(Methods::GET, $baseURI.'/vehicles/{vehicle_id:\d+}/fuel', $getFuelContent);
 
     // login form routes
     $r->addRoute(Methods::POST, $baseURI.'/login', $handleLogin);

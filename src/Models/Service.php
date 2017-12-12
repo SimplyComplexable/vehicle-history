@@ -47,7 +47,6 @@ class Service
         foreach($data as $key => $value) {
             $this->set($key, $value);
         }
-
     }
 
     private function constructWithValues($date, $service, $odometer, $cost, $location, $vin, $vehicle_id) {

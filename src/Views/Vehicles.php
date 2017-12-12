@@ -68,7 +68,10 @@
 
     const { Component, h, render } = window.preact;
 
-    const apiURI = 'api/vehicles';
+    const url = new URL(window.location);
+    const apiURI = url.pathname.replace('/vehicles', '/api/vehicles');
+    const baseURI = url.pathname.endsWith('/') ? url.pathname.substr(0, url.pathname.length - 1) : url.pathname;
+    console.log(baseURI);
 
     const getVehicles = () => {
         return fetch(apiURI)
@@ -217,7 +220,7 @@
                             onClick: this.handleToggleNewVehicle.bind(this)
                         }, newVehicle === null ? 'Add Vehicle' : 'Cancel')
                     ),
-                    h('h1', { style: 'font-weight: 400px;'}, 'Your Vehicles'),
+                    h('h1', { style: { fontWeight: '400' }}, 'Your Vehicles'),
                     h('hr'),
                     newVehicleComponent,
                     h('div', {class: 'mt-4 mx-auto'}, vehicleList)
@@ -453,8 +456,8 @@
             return (
                 h('div', null, [
                     h('button', { type: 'button', class: 'btn btn-success mb-3 mt-2 ml-4', onClick: () => handleEditVehicle(vehicle_id) }, 'Edit'),
-                    h('a', { class: 'btn btn-primary mt-2 mb-3 ml-2', href: `./vehicles/${vehicle_id}/history` }, 'Service History'),
-                    h('a', { class: 'btn btn-info mt-2 mb-3 ml-2', href: '' }, 'Fuel Log'),
+                    h('a', { class: 'btn btn-primary mt-2 mb-3 ml-2', href: `${baseURI}/${vehicle_id}/history` }, 'Service History'),
+                    h('a', { class: 'btn btn-info mt-2 mb-3 ml-2', href: `${baseURI}/${vehicle_id}/fuel` }, 'Fuel Log'),
                     h('a', { class: 'btn btn-dark mt-2 mb-3 ml-2', href: '' }, 'Parts'),
                 ])
             )
