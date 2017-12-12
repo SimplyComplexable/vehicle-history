@@ -31,9 +31,9 @@
                 <h1 class="mb-4">Register</h1>
                 <form method="post" action="./register">
                     <div class="form-group">
-                        <input type="text" class="form-control form-control-lg mb-2" placeholder="Username">
-                        <input type="password" class="form-control form-control-lg mb-2" placeholder="Password">
-                        <input type="password" class="form-control form-control-lg mb-2" placeholder="Confirm Password">
+                        <input type="text" class="form-control form-control-lg mb-2" placeholder="Username" name="username">
+                        <input type="password" class="form-control form-control-lg mb-2" placeholder="Password" name="password">
+                        <input type="password" class="form-control form-control-lg mb-2" placeholder="Confirm Password" name="confirmpassword">
                         <div class="ml-2 col-md-13">
                             <p>* Passwords must be 8 characters long, contain one uppercase, one lowercase letter and one number.</p>
                         </div>

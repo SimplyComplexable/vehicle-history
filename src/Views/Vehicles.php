@@ -445,7 +445,7 @@
             return (
                 h('div', {class: 'toggle'}, [
                     h('button', { class: 'btn btn-success ml-4 mt-2 mb-3', onClick: () => saveVehicle() }, 'Save'),
-                    h('button', { class: 'btn btn-secondary ml-2 mt-2 mb-3', onClick: () => handleCancelVehicle(vehicle_id) }, 'Cancel'),
+                    h('button', { class: 'btn btn-warning ml-2 mt-2 mb-3', onClick: () => handleCancelVehicle(vehicle_id) }, 'Cancel'),
                     h('button', { class: 'btn btn-danger ml-2 mt-2 mb-3', onClick: () => handleDeleteVehicle(vehicle_id) }, 'Delete'),
                 ])
             );

@@ -98,9 +98,24 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return json_encode($controller->deleteService($args['id']));
     };
 
-    $handleLogin = function() {
+    $handleLogin = function() use ($baseURI) {
         $controller = new UsersController();
-        return $controller->login($_POST);
+        if($controller->login($_POST)) {
+            header('Location: https://icarus.cs.weber.edu'.$baseURI.'/vehicles');
+        }
+        else {
+            return $controller->httpResponse();
+        }
+    };
+
+    $handleRegister = function() use ($baseURI) {
+        $controller = new UsersController();
+        if($controller->register($_POST)) {
+            header('Location: https://icarus.cs.weber.edu'.$baseURI.'/vehicles');
+        }
+        else {
+            return $controller->httpResponse();
+        }
     };
 
     $vehicleApiEndpoint = $baseURI.'/api/vehicles';
@@ -124,6 +139,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
 
     // login form routes
     $r->addRoute(Methods::POST, $baseURI.'/login', $handleLogin);
+    $r->addRoute(Methods::POST, $baseURI.'/register', $handleRegister);
 
 });
 
