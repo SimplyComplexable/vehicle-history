@@ -17,18 +17,19 @@ class UsersController extends Controller
     public function login($data) {
         if(array_key_exists('username', $data) && array_key_exists('password', $data)) {
             $u = new User();
-            return $u->login($data['username'], $data['password']);
+            $username = filter_var($data['username'], FILTER_SANITIZE_STRING);
+            $password = $data['password'] ?? "";
+            return $u->login($username, $password);
         }
         return false;
     }
 
     public function register($data) {
-        if(array_key_exists('username', $data) && array_key_exists('password', $data) && array_key_exists('confirmpassword', $data)) {
-            if($data['password'] === $data['confirmpassword']){
-                $u = new User();
-                $u->register($data['username'], $data['password']);
-                return true;
-            }
+        if(array_key_exists('username', $data) && array_key_exists('password', $data) && array_key_exists('confirmpassword', $data) && $data['password'] === $data['confirmpassword']) {
+            $u = new User();
+            $username = filter_var($data['username'], FILTER_SANITIZE_STRING);
+            $password = $data['password'] ?? "";
+            return $u->register($username, $password);
         }
         return false;
     }

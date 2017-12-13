@@ -21,6 +21,8 @@ class User
     }
 
     public function login($username, $password) {
+        $this->username = $username;
+        $this->password = $password;
         $user = $this->getUserInfo($username);
         if(!$user)
             return false;
@@ -28,6 +30,8 @@ class User
     }
 
     public function register($username, $password) {
+        $this->username = $username;
+        $this->password = $password;
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         return $this->insertUserInfo($username, $hashedPassword);
     }
