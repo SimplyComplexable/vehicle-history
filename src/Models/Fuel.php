@@ -13,6 +13,7 @@ use VehicleHistory\Utilities\DatabaseConnection;
 class Fuel
 {
     private $fuel_id;
+    private $location;
     private $date;      // date of fill up
     private $odometer;  // total mileage on vehicle at fuel fill up
     private $distance;  // trip odometer when fueled up (how many miles on this tank)
@@ -87,17 +88,19 @@ class Fuel
     public function create() {
         $statement = $this->db->prepare('
           INSERT INTO `fuel` 
-          (`date`, `odometer`, `distance`, `volume`, `cost`, `mpg`)
+          (`location`, `date`, `odometer`, `distance`, `volume`, `cost`, `mpg`, `vehicle_id`)
           VALUES
-          (:date, :odometer, :distance, :volume, :cost, :mpg)
+          (:location, :date, :odometer, :distance, :volume, :cost, :mpg, :vehicle_id)
         ');
 
+        $statement->bindParam(':location', $this->location);
         $statement->bindParam(':date', $this->date);
         $statement->bindParam(':odometer', $this->odometer);
         $statement->bindParam(':distance', $this->distance);
         $statement->bindParam(':volume', $this->volume);
         $statement->bindParam(':cost', $this->cost);
         $statement->bindParam(':mpg', $this->mpg);
+        $statement->bindParam(':vehicle_id', $this->vehicle_id);
 
         if ($statement->execute()) {
             return array(
@@ -110,7 +113,8 @@ class Fuel
     public function update() {
         $statement = $this->db->prepare('
               UPDATE `fuel` 
-              SET `date` = :date,
+              SET `location` = :location,
+              `date` = :date,
               `odometer` = :odometer,
               `distance` = :distance,
               `volume` = :volume,
@@ -120,6 +124,7 @@ class Fuel
               WHERE fuel_id = :fuel_id
           ');
 
+        $statement->bindParam(':location', $this->location);
         $statement->bindParam(':date', $this->date);
         $statement->bindParam(':odometer', $this->odometer);
         $statement->bindParam(':distance', $this->distance);

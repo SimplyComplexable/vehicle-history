@@ -64,6 +64,7 @@ class User
 
     public function buildToken($userId, $username) {
         $this->token = Token::buildToken($userId, $username);
+        var_dump($this->token);
         return $this->token;
     }
 

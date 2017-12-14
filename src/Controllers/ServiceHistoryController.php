@@ -21,6 +21,10 @@ class ServiceHistoryController extends Controller
         $this->vehicle_id = $id;
     }
 
+    public function getAll() {
+        return Service::getAllForVehicle($this->vehicle_id);
+    }
+
     public function addService(array $data) {
         $vehicle = new Service();
         foreach ($data as $key => $value) {
@@ -44,14 +48,12 @@ class ServiceHistoryController extends Controller
     }
 
     protected function beforeRender() {
+        $token = $this->getToken();
+
         $service = new Vehicle($this->vehicle_id);
         $this->setVars(array(
             'vehicle_id' => $this->vehicle_id,
             'vehicle_title' => $service->getModelYear() . ' ' . $service->getMake() . ' ' . $service->getModel()
         ));
-    }
-
-    public function getAll() {
-        return Service::getAllForVehicle($this->vehicle_id);
     }
 }

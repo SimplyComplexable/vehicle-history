@@ -45,7 +45,7 @@ class Token
             ]
         ];
 
-        self::$token = JWT::encode($data, self::$KEY, 'HS256');
+        static::$token = JWT::encode($data, self::$KEY, 'HS256');
 
         return JWT::encode($data, self::$KEY, 'HS256');
     }
@@ -56,16 +56,16 @@ class Token
             $tokenData = (array)JWT::decode($jwt, self::$KEY, array('HS256'));
         } catch (Exception $e) {
             http_response_code(StatusCodes::UNAUTHORIZED);
-            exit("Invalid token. Error: $e");
+            return false;
         } catch (BeforeValidException $e) {
             http_response_code(StatusCodes::UNAUTHORIZED);
-            exit("Invalid token.");
+            return false;
         } catch (ExpiredException $e) {
             http_response_code(StatusCodes::UNAUTHORIZED);
-            exit("Token Expired.");
+            return false;
         } catch (SignatureInvalidException $e) {
             http_response_code(StatusCodes::UNAUTHORIZED);
-            exit("Invalid token.");
+            return false;
         }
 
         return $tokenData;
@@ -75,6 +75,9 @@ class Token
         if ($jwt == null)
             $jwt = self::getBearerTokenFromHeader();
         $tokenData = static::extractTokenData($jwt);
+        if (!$tokenData) {
+            return false;
+        }
         $data = (array)$tokenData['data'];
         return $data['username'];
     }
@@ -83,6 +86,9 @@ class Token
         if ($jwt == null)
             $jwt = self::getBearerTokenFromHeader();
         $tokenData = static::extractTokenData($jwt);
+        if (!$tokenData) {
+            return false;
+        }
         $data = (array)$tokenData['data'];
         return $data['id'];
     }

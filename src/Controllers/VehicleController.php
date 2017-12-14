@@ -7,7 +7,6 @@
  */
 
 namespace VehicleHistory\Controllers;
-
 use VehicleHistory\Models\Vehicle;
 
 class VehicleController extends Controller
@@ -42,10 +41,12 @@ class VehicleController extends Controller
 
     //override Component function which gets called before the page is rendered
     protected function beforeRender() {
+        $token = $this->getToken();
         //set view variables with this function
         //key will be the variables name
         $this->setVars(array(
-            'vehicles' => Vehicle::getAll()
+            'vehicles' => Vehicle::getAll(),
+            'token' => $token
         ));
     }
 }

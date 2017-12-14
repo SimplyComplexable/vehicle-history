@@ -68,18 +68,38 @@
 
     const { Component, h, render } = window.preact;
 
+    const spreadObject = obj => Object.keys(obj).reduce((prev, key) => Object.assign(prev, { [key]: obj[key] }), {});
+
     const url = new URL(window.location);
     const apiURI = url.pathname.replace('/vehicles', '/api/vehicles');
     const baseURI = url.pathname.endsWith('/') ? url.pathname.substr(0, url.pathname.length - 1) : url.pathname;
-    console.log(baseURI);
+
+    sessionStorage.setItem('token', '<?php echo $token ?>');
+
+    let token;
+
+    const getToken = () => {
+        if (token === undefined) {
+            token = sessionStorage.getItem('token');
+        }
+        return token;
+    };
+
+    const fetchWithToken = uri => {
+        const token = getToken();
+        const config = {
+            headers: { 'Authorization': `Bearer: ${token}` }
+        };
+        return fetch(uri, config);
+    }
 
     const getVehicles = () => {
-        return fetch(apiURI)
+        return fetchWithToken(apiURI)
             .then(data => data.json());
     };
 
     const updateVehicle = (id, data) => {
-        return fetch(`${apiURI}/${id}`, {
+        return fetchWithToken(`${apiURI}/${id}`, {
             method: 'PATCH',
             body: JSON.stringify(data)
         })
@@ -87,7 +107,7 @@
     };
 
     const deleteVehicle = id => {
-        return fetch(`${apiURI}/${id}`, {
+        return fetchWithToken(`${apiURI}/${id}`, {
             method: 'DELETE'
         })
             .then(data => data.json());
@@ -95,7 +115,7 @@
 
     const addVehicle = (data) => {
         console.log(data);
-        return fetch(`${apiURI}`, {
+        return fetchWithToken(`${apiURI}`, {
             method: 'POST',
             body: JSON.stringify(data)
         })
@@ -190,7 +210,7 @@
                     if (response.success) {
                         this.setState(prevState => {
                             const vehicles = [...prevState.vehicles];
-                            const newVehicle = {...data};
+                            const newVehicle = spreadObject(data);
                             newVehicle.editing = false;
                             newVehicle.vehicle_id = response.id;
                             vehicles.push(newVehicle);
@@ -271,7 +291,7 @@
             const newVehicle = this.props.vehicle.editing == true;
             const editing = newVehicle;
             const isValid = newVehicle ? false : true;
-            const edits = editing ? { ...this.props.vehicle } : null;
+            const edits = editing ? spreadObject(this.props.vehicle): null;
             this.setState({
                 edits,
                 editing,
@@ -282,7 +302,7 @@
 
         handleEditVehicle() {
             this.setState({
-                edits: {...this.props.vehicle},
+                edits: spreadObject(this.props.vehicle),
                 editing: true
             });
         }
@@ -296,8 +316,8 @@
 
         onChange(field, input) {
             this.setState(prevState => {
-                const errorMessages = { ...prevState.errorMessages };
-                const edits = {...prevState.edits};
+                const errorMessages = spreadObject(prevState.errorMessages);
+                const edits = spreadObject(prevState.edits);
 
                 const isValid = input.validity.valid;
                 if (isValid) {
@@ -456,9 +476,9 @@
             return (
                 h('div', null, [
                     h('button', { type: 'button', class: 'btn btn-success mb-3 mt-2 ml-4', onClick: () => handleEditVehicle(vehicle_id) }, 'Edit'),
-                    h('a', { class: 'btn btn-primary mt-2 mb-3 ml-2', href: `${baseURI}/${vehicle_id}/history` }, 'Service History'),
-                    h('a', { class: 'btn btn-info mt-2 mb-3 ml-2', href: `${baseURI}/${vehicle_id}/fuel` }, 'Fuel Log'),
-                    h('a', { class: 'btn btn-dark mt-2 mb-3 ml-2', href: '' }, 'Parts'),
+                    h('a', { class: 'btn btn-primary mt-2 mb-3 ml-2', href: `${baseURI}/${vehicle_id}/history?token=${getToken()}` }, 'Service History'),
+                    h('a', { class: 'btn btn-info mt-2 mb-3 ml-2', href: `${baseURI}/${vehicle_id}/fuel?token=${getToken()}` }, 'Fuel Log'),
+                    h('a', { class: 'btn btn-dark mt-2 mb-3 ml-2', href: `${baseURI}/${vehicle_id}/parts?token=${getToken()}` }, 'Parts'),
                 ])
             )
         }

@@ -68,6 +68,8 @@
 
     const { Component, h, render } = window.preact;
 
+    const spreadObject = obj => Object.keys(obj).reduce((prev, key) => prev[key] = obj[key], {});
+
     const url = new URL(window.location);
     const apiURI = url.pathname.replace('/vehicles', '/api/vehicles');
 
@@ -180,7 +182,7 @@
                     if (response.success) {
                         this.setState(prevState => {
                             const services = [...prevState.services];
-                            const newService = {...data};
+                            const newService = spreadObject(data);
                             newService.editing = false;
                             newService.vehicle_id = response.id;
                             services.push(newService);
@@ -345,10 +347,10 @@
         }
 
         componentDidMount() {
-            const newService = this.props.service.editing == true;
+            const newService = this.props.service.editing === true;
             const editing = newService;
-            const isValid = newService ? false : true;
-            const edits = editing ? { ...this.props.service } : null;
+            const isValid = !newService;
+            const edits = editing ? spreadObject(this.props.service ) : null;
             this.setState({
                 edits,
                 editing,
@@ -359,7 +361,7 @@
 
         handleEditService() {
             this.setState({
-                edits: {...this.props.service},
+                edits: spreadObject(this.props.service),
                 editing: true
             });
         }
@@ -373,8 +375,8 @@
 
         onChange(field, input) {
             this.setState(prevState => {
-                const errorMessages = { ...prevState.errorMessages };
-                const edits = {...prevState.edits};
+                const errorMessages = spreadObject(prevState.errorMessages );
+                const edits = spreadObject(prevState.edits);
                 const isValid = input.validity.valid;
                 if (isValid) {
                     input.classList.remove('error');
