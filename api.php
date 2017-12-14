@@ -44,6 +44,10 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return json_decode(file_get_contents('php://input'));
     };
 
+    //
+    // MAIN ROUTE HANDLERS
+    //
+
     $handleGet = function($args) use ($controllerFactory) {
         $controller = $controllerFactory($args['route']);
         if ($controller !== null) {
@@ -55,6 +59,10 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         $controller = new HomeController();
         return $controller->httpResponse();
     };
+
+    //
+    // VEHICLE ROUTE HANDLERS
+    //
 
     $handleGetAllVehicles = function() use ($checkToken) {
         $user_id = $checkToken();
@@ -88,6 +96,10 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return json_encode($controller->deleteVehicle($user_id, $args['id']));
     };
 
+    //
+    // SERVICE ROUTE HANDLERS
+    //
+
     $handleGetAllServices = function ($args) use ($checkToken) {
         $user_id = $checkToken();
         if(!$user_id)
@@ -119,6 +131,10 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         $controller = new ServiceHistoryController($args['vehicle_id']);
         return json_encode($controller->deleteService($user_id, $args['id']));
     };
+
+    //
+    // FUEL ROUTE HANDLERS
+    //
 
     $handleGetAllFuels = function ($args) use ($checkToken) {
         $user_id = $checkToken();
@@ -152,44 +168,52 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return json_encode($controller->deleteFuel($user_id, $args['id']));
     };
 
-    $getHistoryContent = function($args) use ($checkToken) {
+    //
+    // PARTS ROUTE HANDLERS
+    //
+
+    $handleGetAllParts = function ($args) use ($checkToken){
         $user_id = $checkToken();
-        if(!$user_id)
+        if (!$user_id)
             return false;
-    $handleGetAllParts = function ($args) {
         $controller = new PartsController($args['vehicle_id']);
-        return json_encode($controller->getAll());
+        return json_encode($controller->getAll($user_id));
     };
 
-    $handleAddPart = function ($args) use ($getFileContent) {
+    $handleAddPart = function ($args) use ($getFileContent, $checkToken) {
+        $user_id = $checkToken();
+        if (!$user_id)
+            return false;
         $controller = new PartsController($args['vehicle_id']);
-        return json_encode($controller->addPart(get_object_vars($getFileContent())));
+        return json_encode($controller->addPart($user_id, get_object_vars($getFileContent())));
     };
 
-    $handleUpdatePart = function ($args) use ($getFileContent) {
-        $id = $checkToken();
-        if ($id) {
-
-        }
+    $handleUpdatePart = function ($args) use ($getFileContent, $checkToken) {
+        $user_id = $checkToken();
+        if (!$user_id)
+            return false;
         $controller = new PartsController($args['vehicle_id']);
-        return json_encode($controller->updatePart($args['id'], get_object_vars($getFileContent())));
+        return json_encode($controller->updatePart($user_id, $args['id'], get_object_vars($getFileContent())));
     };
 
-    $handleDeletePart = function ($args) {
+    $handleDeletePart = function ($args) use ($checkToken) {
+        $user_id = $checkToken();
+        if (!$user_id)
+            return false;
         $controller = new PartsController($args['vehicle_id']);
-        return json_encode($controller->deletePart($args['id']));
+        return json_encode($controller->deletePart($user_id, $args['id']));
     };
 
+    //
+    // MISC ROUTE HANDLERS
+    //
 
     $getHistoryContent = function($args) {
         $controller = new ServiceHistoryController($args['vehicle_id']);
         return $controller->httpResponse();
     };
 
-    $getFuelContent = function($args) use ($checkToken) {
-        $user_id = $checkToken();
-        if(!$user_id)
-            return false;
+    $getFuelContent = function($args) {
         $controller = new FuelController($args['vehicle_id']);
         return $controller->httpResponse();
     };
@@ -199,6 +223,9 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return $controller->httpResponse();
     };
 
+    //
+    // LOGIN/REGISTER ROUTE HANDLERS
+    //
 
     $handleLogin = function() use ($baseURI) {
         $controller = new UsersController();
@@ -251,7 +278,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
     $r->addRoute(Methods::GET, $baseURI.'/vehicles/{vehicle_id:\d+}/fuel', $getFuelContent);
     $r->addRoute(Methods::GET, $baseURI.'/vehicles/{vehicle_id:\d+}/parts', $getPartsContent);
 
-    // login form routes
+    // login/register routes
     $r->addRoute(Methods::POST, $baseURI.'/login', $handleLogin);
     $r->addRoute(Methods::POST, $baseURI.'/register', $handleRegister);
 });

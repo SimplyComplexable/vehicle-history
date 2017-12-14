@@ -21,6 +21,10 @@ class FuelController extends Controller
         $this->vehicle_id = $id;
     }
 
+    public function getAll($user_id) {
+        return Fuel::getAllForVehicle($this->vehicle_id);
+    }
+
     public function addFuel($user_id, array $data) {
         $fuel = new Fuel();
         foreach ($data as $key => $value) {
@@ -51,9 +55,5 @@ class FuelController extends Controller
             'vehicle_id' => $this->vehicle_id,
             'vehicle_title' => $vehicle->getModelYear() . ' ' . $vehicle->getMake() . ' ' . $vehicle->getModel()
         ));
-    }
-
-    public function getAll($user_id) {
-        return Fuel::getAllForVehicle($this->vehicle_id);
     }
 }
