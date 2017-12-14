@@ -2,6 +2,8 @@
 
 namespace VehicleHistory\Controllers;
 
+use VehicleHistory\Models\Token;
+
 class Controller {
 // name of view file, not including extension (assumed to be .php)
     protected $viewFileName;
@@ -60,6 +62,17 @@ class Controller {
         foreach ($variablesArray as $name => $value) {
             $this->variables[$name] = $value;
         }
+    }
+
+    protected function getToken() {
+        // !!! HACK DOES NOT WORK AT THE TOP OF THE FILE !!!
+        require(__DIR__.'/../../config.php');
+        if (!array_key_exists('token', $_GET) || !Token::getIDFromToken($_GET['token'])) {
+            header('Location: https://icarus.cs.weber.edu'.$baseURI.'/login');
+            return false;
+        }
+
+        return $_GET['token'];
     }
 
     /**

@@ -8,25 +8,150 @@
 
 namespace VehicleHistory\Models;
 
+use VehicleHistory\Utilities\DatabaseConnection;
+
 class Part
 {
+    private $part_id;
     private $part_name;
     private $part_number;
     private $price;
     private $manufacturer;  // who makes the part
     private $vendor;        // who the part was purchased from
     private $notes;         // any notes about the part
+    private $vehicle_id;
+    private $db;
 
+    public function __construct(...$args) {
+        $this->initializeDatabase();
+        switch (count($args)) {
+            case 0:
+                break;
+            case 1:
+                $this->constructWithId($args[0]);
+                break;
+            default:
+                $this->constructWithValues(...$args);
+        }
+    }
 
-    public function __construct($part_name, $part_number, $price, $manufacturer, $vendor, $notes = "")
+    private function constructWithId(int $id) {
+        $this->part_id = $id;
+        $statement = $this->db->prepare('SELECT * FROM `part` WHERE `part_id` = :part_id');
+        $statement->bindParam(':part_id', $this->part_id);
+        $statement->setFetchMode(\PDO::FETCH_ASSOC);
+        $statement->execute();
+
+        $data = $statement->fetch();
+        foreach($data as $key => $value) {
+            $this->set($key, $value);
+        }
+    }
+
+    private function constructWithValues($part_id, $part_name, $part_number, $price, $manufacturer, $vendor, $notes, $vehicle_id)
     {
+        $this->part_id = $part_id;
         $this->part_name = $part_name;
         $this->part_number = $part_number;
         $this->price = $price;
         $this->manufacturer = $manufacturer;
         $this->vendor = $vendor;
         $this->notes = $notes;
+        $this->vehicle_id = $vehicle_id;
     }
+
+    private function initializeDatabase() {
+        $this->db = DatabaseConnection::getInstance();
+    }
+
+
+    public static function getAllForVehicle($vehicle_id): array {
+        $db = DatabaseConnection::getInstance();
+        $statement = $db->prepare('SELECT * FROM `part` WHERE `vehicle_id` = :vehicle_id');
+        $statement->bindParam(':vehicle_id', $vehicle_id);
+        $statement->setFetchMode(\PDO::FETCH_ASSOC);
+
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+
+    public function set($field, $value) {
+        if (property_exists($this,$field)) {
+            $this->$field = $value;
+        }
+    }
+
+    public function save() {
+        if ($this->part_id === null || $this->part_id === '') {
+            return $this->create();
+        }
+        return $this->update();
+    }
+
+    public function create() {
+        $statement = $this->db->prepare('
+          INSERT INTO `fuel` 
+          (`part_name`, `part_number`, `price`, `manufacturer`, `vendor`, `notes`, `vehicle_id`)
+          VALUES
+          (:part_name, :part_number, :price, :manufacturer, :vendor, :notes, :vehicle_id)
+        ');
+        $statement->bindParam(':part_name', $this->part_name);
+        $statement->bindParam(':part_number', $this->part_number);
+        $statement->bindParam(':price', $this->price);
+        $statement->bindParam(':manufacturer', $this->manufacturer);
+        $statement->bindParam(':vendor', $this->vendor);
+        $statement->bindParam(':notes', $this->notes);
+        $statement->bindParam(':vehicle_id', $this->vehicle_id);
+
+        if ($statement->execute()) {
+            return array(
+                'success' => true,
+                'id' => $this->db->lastInsertId()
+            );
+        }
+    }
+
+    public function update() {
+        $statement = $this->db->prepare('
+              UPDATE `part` 
+              SET 
+              `part_name` = :part_name
+              `part_number` = :part_number
+              `price` = :price
+              `manufacturer` = :manufacturer
+              `vendor` = :vendor
+              `notes` = :notes
+              `vehicle_id` = :vehicle_id
+              WHERE `part_id` = :part_id
+          ');
+
+        $statement->bindParam(':part_name', $this->part_name);
+        $statement->bindParam(':part_number', $this->part_number);
+        $statement->bindParam(':price', $this->price);
+        $statement->bindParam(':manufacturer', $this->manufacturer);
+        $statement->bindParam(':vendor', $this->vendor);
+        $statement->bindParam(':notes', $this->notes);
+        $statement->bindParam(':vehicle_id', $this->vehicle_id);
+        $statement->bindParam(':part_id', $this->part_id);
+
+        return array(
+            'success' => $statement->execute()
+        );
+    }
+
+    public function delete() {
+        $statement = $this->db->prepare('
+            DELETE
+            FROM `part`
+            WHERE part_id = :part_id
+        ');
+
+        $statement->bindParam(':part_id', $this->part_id);
+        return array(
+            'success' => $statement->execute()
+        );
+    }
+
 
     /**
      * @return mixed

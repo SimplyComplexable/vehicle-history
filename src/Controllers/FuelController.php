@@ -44,6 +44,8 @@ class FuelController extends Controller
     }
 
     protected function beforeRender() {
+        $token = $this->getToken();
+
         $vehicle = new Vehicle($this->vehicle_id);
         $this->setVars(array(
             'vehicle_id' => $this->vehicle_id,

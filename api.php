@@ -49,7 +49,6 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         if ($controller !== null) {
             return $controller->httpResponse();
         }
-        http_response_code(StatusCodes::NOT_FOUND);
     };
 
     $handleGetHome = function() {
@@ -157,6 +156,32 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         $user_id = $checkToken();
         if(!$user_id)
             return false;
+    $handleGetAllParts = function ($args) {
+        $controller = new PartsController($args['vehicle_id']);
+        return json_encode($controller->getAll());
+    };
+
+    $handleAddPart = function ($args) use ($getFileContent) {
+        $controller = new PartsController($args['vehicle_id']);
+        return json_encode($controller->addPart(get_object_vars($getFileContent())));
+    };
+
+    $handleUpdatePart = function ($args) use ($getFileContent) {
+        $id = $checkToken();
+        if ($id) {
+
+        }
+        $controller = new PartsController($args['vehicle_id']);
+        return json_encode($controller->updatePart($args['id'], get_object_vars($getFileContent())));
+    };
+
+    $handleDeletePart = function ($args) {
+        $controller = new PartsController($args['vehicle_id']);
+        return json_encode($controller->deletePart($args['id']));
+    };
+
+
+    $getHistoryContent = function($args) {
         $controller = new ServiceHistoryController($args['vehicle_id']);
         return $controller->httpResponse();
     };
@@ -169,11 +194,17 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return $controller->httpResponse();
     };
 
+    $getPartsContent = function($args) {
+        $controller = new PartsController($args['vehicle_id']);
+        return $controller->httpResponse();
+    };
+
 
     $handleLogin = function() use ($baseURI) {
         $controller = new UsersController();
-        if($controller->login($_POST)) {
-            header('Location: https://icarus.cs.weber.edu'.$baseURI.'/vehicles');
+        $token = $controller->login($_POST);
+        if($token !== false) {
+            header('Location: https://icarus.cs.weber.edu'.$baseURI.'/vehicles?token='.$token);
         }
         return $controller->httpResponse();
     };
@@ -189,6 +220,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
     $vehicleApiEndpoint = $baseURI.'/api/vehicles';
     $servicesApiEndpoint = $vehicleApiEndpoint. '/{vehicle_id:\d+}/history';
     $fuelsApiEndpoint = $vehicleApiEndpoint. '/{vehicle_id:\d+}/fuel';
+    $partsApiEndpoint = $vehicleApiEndpoint. '/{vehicle_id:\d+}/parts';
 
 
     // api routes
@@ -207,11 +239,17 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
     $r->addRoute(Methods::PATCH, $fuelsApiEndpoint.'/{id:\d+}', $handleUpdateFuel);
     $r->addRoute(Methods::DELETE, $fuelsApiEndpoint.'/{id:\d+}', $handleDeleteFuel);
 
+    $r->addRoute(Methods::GET, $partsApiEndpoint, $handleGetAllParts);
+    $r->addRoute(Methods::POST, $partsApiEndpoint, $handleAddPart);
+    $r->addRoute(Methods::PATCH, $partsApiEndpoint.'/{id:\d+}', $handleUpdatePart);
+    $r->addRoute(Methods::DELETE, $partsApiEndpoint.'/{id:\d+}', $handleDeletePart);
+
     // page routes
     $r->addRoute(Methods::GET, $baseURI, $handleGetHome);
     $r->addRoute(Methods::GET, $baseURI.'/{route}', $handleGet);
     $r->addRoute(Methods::GET, $baseURI.'/vehicles/{vehicle_id:\d+}/history', $getHistoryContent);
     $r->addRoute(Methods::GET, $baseURI.'/vehicles/{vehicle_id:\d+}/fuel', $getFuelContent);
+    $r->addRoute(Methods::GET, $baseURI.'/vehicles/{vehicle_id:\d+}/parts', $getPartsContent);
 
     // login form routes
     $r->addRoute(Methods::POST, $baseURI.'/login', $handleLogin);

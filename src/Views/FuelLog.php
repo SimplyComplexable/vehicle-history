@@ -72,6 +72,8 @@
 
     const { Component, h, render } = window.preact;
 
+    const spreadObject = obj => Object.keys(obj).reduce((prev, key) => prev[key] = obj[key], {});
+
     const url = new URL(window.location);
     const apiURI = url.pathname.replace('/vehicles', '/api/vehicles');
 
@@ -96,7 +98,6 @@
     };
 
     const addFuel = (data) => {
-        console.log(data);
         return fetch(`${apiURI}`, {
             method: 'POST',
             body: JSON.stringify(data)
@@ -185,9 +186,9 @@
                     if (response.success) {
                         this.setState(prevState => {
                             const fuels = [...prevState.fuels];
-                            const newFuel = {...data};
+                            const newFuel = spreadObject(data);
                             newFuel.editing = false;
-                            newFuel.vehicle_id = response.id;
+                            newFuel.fuel_id = response.id;
                             fuels.push(newFuel);
                             return { fuels, newFuel: null };
                         });
@@ -330,10 +331,10 @@
         }
 
         componentDidMount() {
-            const newFuel = this.props.fuel.editing == true;
+            const newFuel = this.props.fuel.editing === true;
             const editing = newFuel;
-            const isValid = newFuel ? false : true;
-            const edits = editing ? { ...this.props.fuel } : null;
+            const isValid = !newFuel;
+            const edits = editing ? spreadObject(this.props.fuel ) : null;
             this.setState({
                 edits,
                 editing,
@@ -344,7 +345,7 @@
 
         handleEditFuel() {
             this.setState({
-                edits: {...this.props.fuel},
+                edits: spreadObject(this.props.fuel),
                 editing: true
             });
         }
@@ -358,8 +359,8 @@
 
         onChange(field, input) {
             this.setState(prevState => {
-                const errorMessages = { ...prevState.errorMessages };
-                const edits = {...prevState.edits};
+                const errorMessages = spreadObject(prevState.errorMessages );
+                const edits = spreadObject(prevState.edits);
                 const isValid = input.validity.valid;
                 if (isValid) {
                     input.classList.remove('error');
