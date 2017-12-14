@@ -9,12 +9,14 @@
 namespace VehicleHistory\Models;
 
 use VehicleHistory\Utilities\DatabaseConnection;
+use VehicleHistory\Models\Token;
 
 class User
 {
     private $user_id;
     private $username;
     private $password;
+    private $token;
 
 
     public function __construct(){
@@ -26,14 +28,18 @@ class User
         $user = $this->getUserInfo($username);
         if(!$user)
             return false;
-        return password_verify($password, $user['password']);
+        password_verify($password, $user['password']);
+        return $this->buildToken($user['user_id'], $username);
     }
 
     public function register($username, $password) {
         $this->username = $username;
         $this->password = $password;
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-        return $this->insertUserInfo($username, $hashedPassword);
+        $userId = $this->insertUserInfo($username, $hashedPassword);
+        if($userId)
+            return $this->buildToken($userId, $username);
+        return false;
     }
 
     private function getUserInfo($username) {
@@ -51,10 +57,17 @@ class User
         $statement = $db->prepare('INSERT INTO `user` (`username`, `password`) VALUES(:username, :password)');
         $statement->bindParam(':username', $username);
         $statement->bindParam(':password', $password);
-        return $statement->execute();
+        if(!$statement->execute())
+            return false;
+        return $db->lastInsertId();
     }
 
-    private function contructWithToken() {
+    public function buildToken($userId, $username) {
+        $this->token = Token::buildToken($userId, $username);
+        return $this->token;
+    }
+
+    private function constructWithToken() {
         $this->user_id = 1;
     }
 

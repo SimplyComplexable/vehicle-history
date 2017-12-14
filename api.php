@@ -16,7 +16,6 @@ use VehicleHistory\Controllers\PartsController;
 use VehicleHistory\Controllers\ServiceHistoryController;
 use VehicleHistory\Controllers\VehicleController;
 use VehicleHistory\Controllers\UsersController;
-use VehicleHistory\Controllers\TokensController;
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  use ($baseURI) {
 
@@ -36,27 +35,6 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         }
     };
 
-    /** TOKENS CLOSURE */
-    $handlePostToken = function ($args) {
-        $tokenController = new TokensController();
-        //Is the data via a form?
-        if (!empty($_POST['username'])) {
-            $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
-            $password = $_POST['password'] ?? "";
-        } else {
-            //Attempt to parse json input
-            $json = (object) json_decode(file_get_contents('php://input'));
-            if (count((array)$json) >= 2) {
-                $username = filter_var($json->username, FILTER_SANITIZE_STRING);
-                $password = $json->password;
-            } else {
-                http_response_code(StatusCodes::BAD_REQUEST);
-                exit();
-            }
-        }
-        return $tokenController->buildToken($username, $password);
-
-    };
 
     $getFileContent = function() {
         return json_decode(file_get_contents('php://input'));
@@ -151,9 +129,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         if($controller->login($_POST)) {
             header('Location: https://icarus.cs.weber.edu'.$baseURI.'/vehicles');
         }
-        else {
-            return $controller->httpResponse();
-        }
+        return $controller->httpResponse();
     };
 
     $handleRegister = function() use ($baseURI) {
@@ -161,9 +137,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         if($controller->register($_POST)) {
             header('Location: https://icarus.cs.weber.edu'.$baseURI.'/vehicles');
         }
-        else {
-            return $controller->httpResponse();
-        }
+        return $controller->httpResponse();
     };
 
     $vehicleApiEndpoint = $baseURI.'/api/vehicles';
@@ -196,10 +170,6 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
     // login form routes
     $r->addRoute(Methods::POST, $baseURI.'/login', $handleLogin);
     $r->addRoute(Methods::POST, $baseURI.'/register', $handleRegister);
-
-    // TOKEN ROUTE
-    $r->addRoute(Methods::POST, $baseURI . '/tokens', $handlePostToken);
-
 });
 
 $method = $_SERVER['REQUEST_METHOD'];

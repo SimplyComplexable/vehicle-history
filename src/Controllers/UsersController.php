@@ -25,7 +25,8 @@ class UsersController extends Controller
     }
 
     public function register($data) {
-        if(array_key_exists('username', $data) && array_key_exists('password', $data) && array_key_exists('confirmpassword', $data) && $data['password'] === $data['confirmpassword']) {
+        if(array_key_exists('username', $data) && array_key_exists('password', $data)
+            && array_key_exists('confirmpassword', $data) && $data['password'] === $data['confirmpassword']) {
             $u = new User();
             $username = filter_var($data['username'], FILTER_SANITIZE_STRING);
             $password = $data['password'] ?? "";

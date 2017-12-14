@@ -24,9 +24,9 @@ class Token
     /**
      * @var string Contains a standard JWT.
      */
-    public $token = "";
+    public static $token = "";
 
-    public function buildToken($id, $username)
+    public static function buildToken($id, $username)
     {
         $tokenId = uniqid("", true);//TODO: Reset with MCrypt Enabled. //base64_encode(mcrypt_create_iv(32));
         $issuedAt = time();
@@ -45,9 +45,9 @@ class Token
             ]
         ];
 
-        $this->token = JWT::encode($data, self::$KEY, 'HS256');
+        self::$token = JWT::encode($data, self::$KEY, 'HS256');
 
-        return $this->token;
+        return JWT::encode($data, self::$KEY, 'HS256');
     }
 
     private static function extractTokenData($jwt)
