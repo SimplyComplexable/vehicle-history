@@ -14,11 +14,11 @@ class VehicleController extends Controller
 {
     protected $viewFileName = 'Vehicles';
 
-    public function getAll() {
+    public function getAll($user_id) {
         return Vehicle::getAll();
     }
 
-    public function addVehicle(array $data) {
+    public function addVehicle($user_id, array $data) {
         $vehicle = new Vehicle();
         foreach ($data as $key => $value) {
             $vehicle->set($key, $value);
@@ -27,7 +27,7 @@ class VehicleController extends Controller
         return $vehicle->save();
     }
 
-    public function updateVehicle(int $id, array $updates) {
+    public function updateVehicle($user_id, int $id, array $updates) {
         $vehicle = new Vehicle($id);
         foreach($updates as $key => $value) {
             $vehicle->set($key, $value);
@@ -35,7 +35,7 @@ class VehicleController extends Controller
         return $vehicle->save();
     }
 
-    public function deleteVehicle(int $id) {
+    public function deleteVehicle($user_id, int $id) {
         $vehicle = new Vehicle($id);
         return $vehicle->delete();
     }

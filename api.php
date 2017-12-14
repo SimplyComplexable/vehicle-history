@@ -16,6 +16,7 @@ use VehicleHistory\Controllers\PartsController;
 use VehicleHistory\Controllers\ServiceHistoryController;
 use VehicleHistory\Controllers\VehicleController;
 use VehicleHistory\Controllers\UsersController;
+use VehicleHistory\Models\Token;
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  use ($baseURI) {
 
@@ -35,10 +36,14 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         }
     };
 
+    $checkToken = function() {
+        return Token::getIDFromToken();
+    };
 
     $getFileContent = function() {
         return json_decode(file_get_contents('php://input'));
     };
+
     $handleGet = function($args) use ($controllerFactory) {
         $controller = $controllerFactory($args['route']);
         if ($controller !== null) {
@@ -52,73 +57,114 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         return $controller->httpResponse();
     };
 
-    $handleGetAllVehicles = function() {
+    $handleGetAllVehicles = function() use ($checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new VehicleController();
-        return json_encode($controller->getAll());
+        return json_encode($controller->getAll($user_id));
     };
 
-    $handleAddVehicle = function() use ($getFileContent) {
+    $handleAddVehicle = function() use ($getFileContent, $checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new VehicleController();
-        return json_encode($controller->addVehicle(get_object_vars($getFileContent())));
+        return json_encode($controller->addVehicle($user_id, get_object_vars($getFileContent())));
     };
 
-    $handleUpdateVehicle = function($args) use ($getFileContent) {
+    $handleUpdateVehicle = function($args) use ($getFileContent, $checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new VehicleController();
-        return json_encode($controller->updateVehicle($args['id'], get_object_vars($getFileContent())));
+        return json_encode($controller->updateVehicle($user_id, $args['id'], get_object_vars($getFileContent())));
     };
 
-    $handleDeleteVehicle = function($args) {
+    $handleDeleteVehicle = function($args) use ($checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new VehicleController();
-        return json_encode($controller->deleteVehicle($args['id']));
+        return json_encode($controller->deleteVehicle($user_id, $args['id']));
     };
 
-    $handleGetAllServices = function ($args) {
+    $handleGetAllServices = function ($args) use ($checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new ServiceHistoryController($args['vehicle_id']);
-        return json_encode($controller->getAll());
+        return json_encode($controller->getAll($user_id));
     };
 
-    $handleAddService = function ($args) use ($getFileContent) {
+    $handleAddService = function ($args) use ($getFileContent, $checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new ServiceHistoryController($args['vehicle_id']);
-        return json_encode($controller->addService(get_object_vars($getFileContent())));
+        return json_encode($controller->addService($user_id, get_object_vars($getFileContent())));
     };
 
-    $handleUpdateService = function ($args) use ($getFileContent) {
+    $handleUpdateService = function ($args) use ($getFileContent, $checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new ServiceHistoryController($args['vehicle_id']);
-        return json_encode($controller->updateService($args['id'], get_object_vars($getFileContent())));
+        return json_encode($controller->updateService($user_id, $args['id'], get_object_vars($getFileContent())));
     };
 
-    $handleDeleteService = function ($args) use ($getFileContent) {
+    $handleDeleteService = function ($args) use ($getFileContent, $checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new ServiceHistoryController($args['vehicle_id']);
-        return json_encode($controller->deleteService($args['id']));
+        return json_encode($controller->deleteService($user_id, $args['id']));
     };
 
-    $handleGetAllFuels = function ($args) {
+    $handleGetAllFuels = function ($args) use ($checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new FuelController($args['vehicle_id']);
-        return json_encode($controller->getAll());
+        return json_encode($controller->getAll($user_id));
     };
 
-    $handleAddFuel = function ($args) use ($getFileContent) {
+    $handleAddFuel = function ($args) use ($getFileContent, $checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new FuelController($args['vehicle_id']);
-        return json_encode($controller->addFuel(get_object_vars($getFileContent())));
+        return json_encode($controller->addFuel($user_id, get_object_vars($getFileContent())));
     };
 
-    $handleUpdateFuel = function ($args) use ($getFileContent) {
+    $handleUpdateFuel = function ($args) use ($getFileContent, $checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new FuelController($args['vehicle_id']);
-        return json_encode($controller->updateFuel($args['id'], get_object_vars($getFileContent())));
+        return json_encode($controller->updateFuel($user_id, $args['id'], get_object_vars($getFileContent())));
     };
 
-    $handleDeleteFuel = function ($args) use ($getFileContent) {
+    $handleDeleteFuel = function ($args) use ($getFileContent, $checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new FuelController($args['vehicle_id']);
-        return json_encode($controller->deleteFuel($args['id']));
+        return json_encode($controller->deleteFuel($user_id, $args['id']));
     };
 
-
-    $getHistoryContent = function($args) {
+    $getHistoryContent = function($args) use ($checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new ServiceHistoryController($args['vehicle_id']);
         return $controller->httpResponse();
     };
 
-    $getFuelContent = function($args) {
+    $getFuelContent = function($args) use ($checkToken) {
+        $user_id = $checkToken();
+        if(!$user_id)
+            return false;
         $controller = new FuelController($args['vehicle_id']);
         return $controller->httpResponse();
     };

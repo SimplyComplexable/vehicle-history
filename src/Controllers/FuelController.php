@@ -21,7 +21,7 @@ class FuelController extends Controller
         $this->vehicle_id = $id;
     }
 
-    public function addFuel(array $data) {
+    public function addFuel($user_id, array $data) {
         $fuel = new Fuel();
         foreach ($data as $key => $value) {
             $fuel->set($key, $value);
@@ -30,7 +30,7 @@ class FuelController extends Controller
         return $fuel->save();
     }
 
-    public function updateFuel(int $id, array $updates) {
+    public function updateFuel($user_id, int $id, array $updates) {
         $fuel = new Fuel($id);
         foreach($updates as $key => $value) {
             $fuel->set($key, $value);
@@ -38,7 +38,7 @@ class FuelController extends Controller
         return $fuel->save();
     }
 
-    public function deleteFuel(int $id) {
+    public function deleteFuel($user_id, int $id) {
         $fuel = new Fuel($id);
         return $fuel->delete();
     }
@@ -51,7 +51,7 @@ class FuelController extends Controller
         ));
     }
 
-    public function getAll() {
+    public function getAll($user_id) {
         return Fuel::getAllForVehicle($this->vehicle_id);
     }
 }

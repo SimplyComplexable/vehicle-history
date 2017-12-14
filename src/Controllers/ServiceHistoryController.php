@@ -21,7 +21,7 @@ class ServiceHistoryController extends Controller
         $this->vehicle_id = $id;
     }
 
-    public function addService(array $data) {
+    public function addService($user_id, array $data) {
         $vehicle = new Service();
         foreach ($data as $key => $value) {
             $vehicle->set($key, $value);
@@ -30,7 +30,7 @@ class ServiceHistoryController extends Controller
         return $vehicle->save();
     }
 
-    public function updateService(int $id, array $updates) {
+    public function updateService($user_id, int $id, array $updates) {
         $service = new Service($id);
         foreach($updates as $key => $value) {
             $service->set($key, $value);
@@ -38,7 +38,7 @@ class ServiceHistoryController extends Controller
         return $service->save();
     }
 
-    public function deleteService(int $id) {
+    public function deleteService($user_id, int $id) {
         $service = new Service($id);
         return $service->delete();
     }
@@ -51,7 +51,7 @@ class ServiceHistoryController extends Controller
         ));
     }
 
-    public function getAll() {
+    public function getAll($user_id) {
         return Service::getAllForVehicle($this->vehicle_id);
     }
 }
