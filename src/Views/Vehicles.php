@@ -96,7 +96,6 @@
         const headerConfig = Object.assign({}, config || {}, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        console.log(uri);
         return fetch(uri, headerConfig);
     };
 
@@ -106,7 +105,6 @@
     };
 
     const updateVehicle = (id, data) => {
-        console.log(apiURI);
         return fetchWithToken(`${apiURI}/${id}`, {
             method: 'PATCH',
             body: JSON.stringify(data)

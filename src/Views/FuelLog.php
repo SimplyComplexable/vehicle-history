@@ -314,7 +314,6 @@
     };
 
     const FuelLink = ({ fuel }) => {
-        console.log(fuel);
         const {
             fuel_id,
             date,
@@ -436,9 +435,6 @@
                 cost,
                 mpg,
             } = editing ? edits : fuel;
-            if (editing) {
-                console.log(edits);
-            }
 
             return (
                 h('div', {
@@ -566,6 +562,11 @@
         switch (type) {
             case 'date':
                 formattedValue = formatDate(value);
+                if (!value) {
+                    const date = new Date();
+                    const print = number => number > 9 ? number : '0' + number;
+                    value = `${date.getFullYear()}-${print(date.getMonth() + 1)}-${print(date.getDate() + 1)}`;
+                }
                 break;
             case 'money':
                 formattedValue = `$${value}`;

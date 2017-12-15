@@ -163,7 +163,6 @@
                     this.setState(prevState => {
                         const services = prevState.services.map(s => {
                             if (s.service_id === newService.service_id) {
-                                console.log(newService);
                                 return newService;
                             }
                             return s;
@@ -418,7 +417,6 @@
                 }
                 errorMessages[field] = input.validationMessage;
                 edits[field] = input.value;
-                console.log(edits);
 
                 return {
                     errorMessages,
@@ -448,9 +446,6 @@
                 cost,
                 location
             } = editing ? edits : service;
-            if (editing) {
-                console.log(edits);
-            }
 
             return (
                 h('div', {
@@ -553,6 +548,11 @@
         switch (type) {
             case 'date':
                 formattedValue = formatDate(value);
+                if (!value) {
+                    const date = new Date();
+                    const print = number => number > 9 ? number : '0' + number;
+                    value = `${date.getFullYear()}-${print(date.getMonth() + 1)}-${print(date.getDate() + 1)}`;
+                }
                 break;
             case 'money':
                 formattedValue = `$${value}`;
