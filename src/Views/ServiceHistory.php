@@ -41,6 +41,10 @@
             font-weight: 500;
             color: #007bff;
         }
+        .bolder {
+            font-weight: 700;
+            color: #007bff;
+        }
         input.error {
             box-shadow: 0 0 3px 2px rgba(255,0,0,.6);
         }
@@ -339,7 +343,12 @@
         const title = (!service_title) ? "" : `${service_title} at ${location} on ${formattedDate}`;
         return (
             h('a', { id: 'col', href: `#ser-${service_id}`, 'data-toggle': 'collapse' },
-                h('div', { class: 'list-group-item fntbgr'}, title)
+                h('div', { class: 'list-group-item fntbgr'}, !service_title ? null :  [
+                    h('span', { class: 'bolder' }, `${service_title}`),
+                    ' at ',
+                    h('span', { class: 'bolder' }, `${location}`),
+                    h('div', { class: 'float-right' }, formattedDate)
+                ])
             )
         );
     };
