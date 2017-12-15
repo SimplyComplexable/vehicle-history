@@ -67,7 +67,7 @@ class Fuel
           SELECT `vehicles`.`user_id` 
           FROM `fuel` 
           INNER JOIN `vehicles`
-          ON `vehicles`.`vehicle_id` = `service`.`vehicle_id`
+          ON `vehicles`.`vehicle_id` = `fuel`.`vehicle_id`
           WHERE `fuel_id` = :fuel_id');
         $statement->bindParam(':fuel_id', $this->fuel_id);
         $statement->setFetchMode(\PDO::FETCH_ASSOC);

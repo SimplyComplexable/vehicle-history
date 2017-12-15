@@ -192,7 +192,7 @@
 
         handleToggleNewVehicle() {
             this.setState(prevState => {
-                if (prevState.newService == null) {
+                if (prevState.newVehicle == null) {
                     return {
                         newVehicle: Vehicles.getDefaultValue()
                     };

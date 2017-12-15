@@ -69,7 +69,7 @@ class Part
           SELECT `vehicles`.`user_id` 
           FROM `part` 
           INNER JOIN `vehicles`
-          ON `vehicles`.`vehicle_id` = `service`.`vehicle_id`
+          ON `vehicles`.`vehicle_id` = `part`.`vehicle_id`
           WHERE `part_id` = :part_id');
         $statement->bindParam(':part_id', $this->part_id);
         $statement->setFetchMode(\PDO::FETCH_ASSOC);
