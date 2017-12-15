@@ -317,7 +317,7 @@
         const formattedDate = formatDate(new Date(date));
         return (
             h('a', { id: 'col', href: `#ser-${fuel_id}`, 'data-toggle': 'collapse' },
-                h('div', { class: 'list-group-item fntbgr'}, !formattedDate ? null : [
+                h('div', { class: 'list-group-item fntbgr'}, !volume ? null : [
                     h('span', { class: 'bolder' }, `${volume} gallons`),
                     ' at ',
                     h('span', { class: 'bolder' }, `${location}`),

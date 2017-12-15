@@ -309,17 +309,18 @@
         const {
             part_id,
             part_name,
+            date,
             manufacturer,
             vendor
         } = part;
-        // const formattedDate = formatDate(new Date(date));
+        const formattedDate = formatDate(new Date(date));
         return (
             h('a', { id: 'col', href: `#ser-${part_id}`, 'data-toggle': 'collapse' },
-                h('div', { class: 'list-group-item fntbgr'}, [
+                h('div', { class: 'list-group-item fntbgr'}, part_name ? null :  [
                     h('span', { class: 'bolder' }, `${manufacturer} ${part_name}`),
                     ' from ',
                     h('span', { class: 'bolder' }, `${vendor}`),
-                    // h('div', { class: 'float-right' }, formattedDate)
+                    h('div', { class: 'float-right' }, formattedDate)
                 ])
             )
         );
