@@ -336,7 +336,7 @@
             service: service_title,
         } = service;
         const formattedDate = formatDate(new Date(date));
-        const title = `${service_title} at ${location} on ${formattedDate}`;
+        const title = (!service_title) ? "" : `${service_title} at ${location} on ${formattedDate}`;
         return (
             h('a', { id: 'col', href: `#ser-${service_id}`, 'data-toggle': 'collapse' },
                 h('div', { class: 'list-group-item fntbgr'}, title)
