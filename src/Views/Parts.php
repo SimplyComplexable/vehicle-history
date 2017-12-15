@@ -316,7 +316,7 @@
         const formattedDate = formatDate(new Date(date));
         return (
             h('a', { id: 'col', href: `#ser-${part_id}`, 'data-toggle': 'collapse' },
-                h('div', { class: 'list-group-item fntbgr'}, part_name ? null :  [
+                h('div', { class: 'list-group-item fntbgr'}, !part_name ? null :  [
                     h('span', { class: 'bolder' }, `${manufacturer} ${part_name}`),
                     ' from ',
                     h('span', { class: 'bolder' }, `${vendor}`),
