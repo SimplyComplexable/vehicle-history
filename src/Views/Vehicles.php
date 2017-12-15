@@ -71,8 +71,8 @@
     const spreadObject = obj => Object.keys(obj).reduce((prev, key) => Object.assign(prev, { [key]: obj[key] }), {});
 
     const url = new URL(window.location);
-    const apiURI = url.pathname.replace('/vehicles', '/api/vehicles');
     const baseURI = url.pathname.endsWith('/') ? url.pathname.substr(0, url.pathname.length - 1) : url.pathname;
+    const apiURI = baseURI.replace('/vehicles', '/api/vehicles');
 
     sessionStorage.setItem('token', '<?php echo $token ?>');
 
@@ -90,6 +90,7 @@
         const headerConfig = Object.assign({}, config || {}, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
+        console.log(uri);
         return fetch(uri, headerConfig);
     };
 
@@ -99,6 +100,7 @@
     };
 
     const updateVehicle = (id, data) => {
+        console.log(apiURI);
         return fetchWithToken(`${apiURI}/${id}`, {
             method: 'PATCH',
             body: JSON.stringify(data)
@@ -307,8 +309,8 @@
         }
 
         handleCancelVehicle() {
-            if (this.state.newService) {
-                return this.props.handleDeleteService();
+            if (this.state.newVehicle) {
+                return this.props.handleDeleteVehicle();
             }
             this.setState({ edits: null, editing: false });
         }
