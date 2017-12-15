@@ -65,7 +65,12 @@ class Part
     }
 
     private function isValidUser($user_id) {
-        $statement = $this->db->prepare('SELECT `user_id` from `part` WHERE `part_id` = :part_id');
+        $statement = $this->db->prepare('
+          SELECT `vehicles`.`user_id` 
+          FROM `part` 
+          INNER JOIN `vehicles`
+          ON `vehicles`.`vehicle_id` = `service`.`vehicle_id`
+          WHERE `part_id` = :part_id');
         $statement->bindParam(':part_id', $this->part_id);
         $statement->setFetchMode(\PDO::FETCH_ASSOC);
         $statement->execute();
@@ -91,13 +96,13 @@ class Part
     }
 
     public function save($user_id) {
+        if ($this->part_id === null || $this->part_id === '') {
+            return $this->create($user_id);
+        }
         if (!$this->isValidUser($user_id)) {
             return array(
                 'success' => false
             );
-        }
-        if ($this->part_id === null || $this->part_id === '') {
-            return $this->create($user_id);
         }
         return $this->update();
     }

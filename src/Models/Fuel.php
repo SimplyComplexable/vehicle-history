@@ -63,7 +63,12 @@ class Fuel
     }
 
     private function isValidUser($user_id) {
-        $statement = $this->db->prepare('SELECT `user_id` from `fuel` WHERE `fuel_id` = :fuel_id');
+        $statement = $this->db->prepare('
+          SELECT `vehicles`.`user_id` 
+          FROM `fuel` 
+          INNER JOIN `vehicles`
+          ON `vehicles`.`vehicle_id` = `service`.`vehicle_id`
+          WHERE `fuel_id` = :fuel_id');
         $statement->bindParam(':fuel_id', $this->fuel_id);
         $statement->setFetchMode(\PDO::FETCH_ASSOC);
         $statement->execute();
@@ -88,13 +93,13 @@ class Fuel
     }
 
     public function save($user_id) {
+        if ($this->fuel_id === null || $this->fuel_id === '') {
+            return $this->create($user_id);
+        }
         if (!$this->isValidUser($user_id)) {
             return array(
                 'success' => false
             );
-        }
-        if ($this->fuel_id === null || $this->fuel_id === '') {
-            return $this->create($user_id);
         }
         return $this->update();
     }
