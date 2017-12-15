@@ -71,9 +71,10 @@ class Vehicle
         return $response['user_id'] === $user_id;
     }
 
-    public static function getAll(): array {
+    public static function getAll($user_id): array {
         $db = DatabaseConnection::getInstance();
-        $statement = $db->prepare('SELECT * FROM `vehicles`');
+        $statement = $db->prepare('SELECT * FROM `vehicles` WHERE `user_id` = :user_id');
+        $statement->bindParam(':user_id', $user_id);
         $statement->setFetchMode(\PDO::FETCH_ASSOC);
 
         $statement->execute();

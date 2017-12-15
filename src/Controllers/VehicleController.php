@@ -14,7 +14,7 @@ class VehicleController extends Controller
     protected $viewFileName = 'Vehicles';
 
     public function getAll($user_id) {
-        return Vehicle::getAll();
+        return Vehicle::getAll($user_id);
     }
 
     public function addVehicle($user_id, array $data) {
