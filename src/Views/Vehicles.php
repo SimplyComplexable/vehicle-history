@@ -470,13 +470,13 @@
                 h('div', {class: 'toggle'}, [
                     h('button', { class: 'btn btn-success ml-4 mt-2 mb-3', onClick: () => saveVehicle() }, 'Save'),
                     h('button', { class: 'btn btn-warning ml-2 mt-2 mb-3', onClick: () => handleCancelVehicle(vehicle_id) }, 'Cancel'),
-                    h('button', { class: 'btn btn-danger ml-2 mt-2 mb-3', onClick: () => handleDeleteVehicle(vehicle_id) }, 'Delete'),
                 ])
             );
         } else {
             return (
                 h('div', null, [
                     h('button', { type: 'button', class: 'btn btn-success mb-3 mt-2 ml-4', onClick: () => handleEditVehicle(vehicle_id) }, 'Edit'),
+                    h('button', { class: 'btn btn-danger mt-2 mr-3 float-right', onClick: () => handleDeleteVehicle(vehicle_id) }, 'Delete'),
                     h('a', { class: 'btn btn-primary mt-2 mb-3 ml-2', href: `${baseURI}/${vehicle_id}/history?token=${getToken()}` }, 'Service History'),
                     h('a', { class: 'btn btn-info mt-2 mb-3 ml-2', href: `${baseURI}/${vehicle_id}/fuel?token=${getToken()}` }, 'Fuel Log'),
                     h('a', { class: 'btn btn-dark mt-2 mb-3 ml-2', href: `${baseURI}/${vehicle_id}/parts?token=${getToken()}` }, 'Parts'),

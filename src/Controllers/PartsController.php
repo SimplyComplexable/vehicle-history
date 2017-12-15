@@ -48,12 +48,13 @@ class PartsController extends Controller
     }
 
     protected function beforeRender() {
-        $token = $this->getToken();
+        $userData = $this->getToken();
 
         $vehicle = new Vehicle($this->vehicle_id);
         $this->setVars(array(
             'vehicle_id' => $this->vehicle_id,
-            'vehicle_title' => $vehicle->getModelYear() . ' ' . $vehicle->getMake() . ' ' . $vehicle->getModel()
+            'vehicle_title' => $vehicle->getModelYear() . ' ' . $vehicle->getMake() . ' ' . $vehicle->getModel(),
+            'token' => $userData['token']
         ));
     }
 }

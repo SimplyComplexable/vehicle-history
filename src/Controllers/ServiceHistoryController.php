@@ -53,7 +53,8 @@ class ServiceHistoryController extends Controller
         $service = new Vehicle($this->vehicle_id);
         $this->setVars(array(
             'vehicle_id' => $this->vehicle_id,
-            'vehicle_title' => $service->getModelYear() . ' ' . $service->getMake() . ' ' . $service->getModel()
+            'vehicle_title' => $service->getModelYear() . ' ' . $service->getMake() . ' ' . $service->getModel(),
+            'token' => $userData['token']
         ));
     }
 }
