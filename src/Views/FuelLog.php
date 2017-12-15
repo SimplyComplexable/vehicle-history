@@ -58,7 +58,7 @@
 </head>
 <body>
 <nav class='navbar navbar-expand-xl navbar-dark bg-primary sticky-top'>
-    <a href='./' class='display-4 navbar-brand ml-2' style='font-size: 1.7em;'>Vehicle Service History Tracking System</a>
+    <a href='../../' class='display-4 navbar-brand ml-2' style='font-size: 1.7em;'>Vehicle Service History Tracking System</a>
     <div class='float-right text-right'>
         <a class="btn btn-primary mx-2 my-sm-0" href="..?token=<?php echo $token ?>">Vehicles</a>
 <!--        <a class="btn btn-primary mr-2 my-sm-0" href="./history">Service History</a>-->
@@ -375,6 +375,17 @@
             this.setState({ edits: null, editing: false });
         }
 
+        onKeyUp(field, input) {
+            this.setState(prevState => {
+                const edits = spreadObject(prevState.edits);
+                edits[field] = input.value;
+                edits['mpg'] = edits['distance'] / edits['volume'];
+                return {
+                    edits
+                };
+            });
+        }
+
         onChange(field, input) {
             this.setState(prevState => {
                 const errorMessages = spreadObject(prevState.errorMessages );
@@ -387,7 +398,6 @@
                 }
                 errorMessages[field] = input.validationMessage;
                 edits[field] = input.value;
-                console.log(edits);
 
                 return {
                     errorMessages,
@@ -445,6 +455,7 @@
                             editing,
                             type: 'number',
                             errorMessage: errorMessages['fuel'],
+                            onKeyUp: this.onKeyUp.bind(this),
                             onChange: this.onChange.bind(this)
                         }),
                         h(FuelDetail, {
@@ -489,6 +500,7 @@
                             step: 0.1,
                             max: 10000,
                             type: 'number',
+                            onKeyUp: this.onKeyUp.bind(this),
                             errorMessage: errorMessages['location'],
                             onChange: this.onChange.bind(this)
                         }),
@@ -497,6 +509,7 @@
                             field: 'mpg',
                             value: mpg,
                             editing,
+                            disabled: 'disabled',
                             type: 'number',
                             errorMessage: errorMessages['location'],
                             onChange: this.onChange.bind(this)
@@ -527,15 +540,16 @@
     };
 
     const formatNumber = number => {
-        return number.split('').reverse().reduce((next, n, i) => {
+        const parts = number.toString().split('.');
+        return parts[0].split('').reverse().reduce((next, n, i) => {
             if (i !== 0 && i % 3 === 0) {
                 return n + ',' + next;
             }
             return n + next;
-        }, '')
+        }, '') + '.' + (parts[1] !== undefined ? parts[1] : '00');
     };
 
-    const FuelDetail = ({ title, field, value, editing, type, min, max, step, onChange, errorMessage }) => {
+    const FuelDetail = ({ title, field, value, editing, type, min, max, step, disabled, onChange, onKeyUp, errorMessage }) => {
         const errorSpan = errorMessage ? (
             h('span', { class: 'error' }, errorMessage)
         ) : null;
@@ -566,8 +580,11 @@
                 min,
                 step,
                 max,
+                disabled,
                 required: 'required',
-                onChange: e => onChange(field, e.target),});
+                onChange: e => onChange(field, e.target),
+                onKeyUp: onKeyUp ? e => onKeyUp(field, e.target) : null
+            });
         }
         return (
             h('li', { class: 'list-group-item fntbgr blk' }, [

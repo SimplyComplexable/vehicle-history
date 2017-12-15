@@ -58,7 +58,7 @@
 </head>
 <body>
 <nav class='navbar navbar-expand-xl navbar-dark bg-primary sticky-top'>
-    <a href='./' class='display-4 navbar-brand ml-2' style='font-size: 1.7em;'>Vehicle Service History Tracking System</a>
+    <a href='../../' class='display-4 navbar-brand ml-2' style='font-size: 1.7em;'>Vehicle Service History Tracking System</a>
     <div class='float-right text-right'>
         <a class="btn btn-primary mx-2 my-sm-0" href="..?token=<?php echo $token ?>">Vehicles</a>
 <!--        <a class="btn btn-primary mr-2 my-sm-0" href="./history">Service History</a>-->
@@ -511,7 +511,7 @@
     };
 
     const formatNumber = number => {
-        const parts = number.split('.');
+        const parts = number.toString().split('.');
         return parts[0].split('').reverse().reduce((next, n, i) => {
             if (i !== 0 && i % 3 === 0) {
                 return n + ',' + next;
