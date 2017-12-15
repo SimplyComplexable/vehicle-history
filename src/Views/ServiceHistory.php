@@ -254,7 +254,7 @@
                             onClick: this.handleToggleNewService.bind(this)
                         }, newService === null ? 'Add Service' : 'Cancel')
                     ),
-                    h('h1', { style: { fontWeight: 400 }}, 'Services for '),
+                    h('h1', { style: { fontWeight: 400 }}, 'Service History for your'),
                     h('h2', { style: { fontWeight: 600 }}, '<?php echo $vehicle_title ?>'),
                     h('hr'),
                     h('div', { class: '' },
