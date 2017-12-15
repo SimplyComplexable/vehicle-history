@@ -84,21 +84,21 @@
         return token;
     };
 
-    const fetchWithToken = uri => {
+    const fetchWithToken = (uri, config = null) => {
         const token = getToken();
-        const config = {
-            headers: { 'Authorization': `Bearer: ${token}` }
-        };
-        return fetch(uri, config);
+        const headerConfig = Object.assign({}, config || {}, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        return fetch(uri, headerConfig);
     };
 
     const getServices = () => {
-        return fetch(apiURI)
+        return fetchWithToken(apiURI)
             .then(data => data.json());
     };
 
     const updateService = (id, data) => {
-        return fetch(`${apiURI}/${id}`, {
+        return fetchWithToken(`${apiURI}/${id}`, {
             method: 'PATCH',
             body: JSON.stringify(data)
         })
@@ -106,15 +106,14 @@
     };
 
     const deleteService = id => {
-        return fetch(`${apiURI}/${id}`, {
+        return fetchWithToken(`${apiURI}/${id}`, {
             method: 'DELETE'
         })
             .then(data => data.json());
     };
 
     const addService = (data) => {
-        console.log(data);
-        return fetch(`${apiURI}`, {
+        return fetchWithToken(`${apiURI}`, {
             method: 'POST',
             body: JSON.stringify(data)
         })
