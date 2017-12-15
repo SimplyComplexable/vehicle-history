@@ -31,7 +31,7 @@ class VehicleController extends Controller
         foreach($updates as $key => $value) {
             $vehicle->set($key, $value);
         }
-        return $vehicle->save();
+        return $vehicle->save($user_id);
     }
 
     public function deleteVehicle($user_id, int $id) {

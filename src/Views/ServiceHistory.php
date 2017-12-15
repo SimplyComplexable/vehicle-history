@@ -68,10 +68,29 @@
 
     const { Component, h, render } = window.preact;
 
-    const spreadObject = obj => Object.keys(obj).reduce((prev, key) => prev[key] = obj[key], {});
+    const spreadObject = obj => Object.keys(obj).reduce((prev, key) => Object.assign(prev, { [key]: obj[key] }), {});
 
     const url = new URL(window.location);
     const apiURI = url.pathname.replace('/vehicles', '/api/vehicles');
+
+    sessionStorage.setItem('token', '<?php echo $token ?>');
+
+    let token;
+
+    const getToken = () => {
+        if (token === undefined) {
+            token = sessionStorage.getItem('token');
+        }
+        return token;
+    };
+
+    const fetchWithToken = uri => {
+        const token = getToken();
+        const config = {
+            headers: { 'Authorization': `Bearer: ${token}` }
+        };
+        return fetch(uri, config);
+    };
 
     const getServices = () => {
         return fetch(apiURI)

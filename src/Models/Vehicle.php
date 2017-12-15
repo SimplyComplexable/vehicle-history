@@ -62,6 +62,14 @@ class Vehicle
         $this->db = DatabaseConnection::getInstance();
     }
 
+    private function isValidUser($user_id) {
+        $statement = $this->db->prepare('SELECT `user_id` from `vehicles` WHERE `vehicle_id` = :vehicle_id');
+        $statement->bindParam(':vehicle_id', $this->vehicle_id);
+        $statement->setFetchMode(\PDO::FETCH_ASSOC);
+        $statement->execute();
+        $response = $statement->fetch();
+        return $response['user_id'] === $user_id;
+    }
 
     public static function getAll(): array {
         $db = DatabaseConnection::getInstance();
@@ -78,15 +86,20 @@ class Vehicle
         }
     }
 
-    public function save() {
+    public function save($user_id) {
+        if (!$this->isValidUser($user_id)) {
+            return array(
+                'success' => false
+            );
+        }
         if ($this->vehicle_id === null || $this->vehicle_id === '') {
-            return $this->create();
+            return $this->create($user_id);
         }
 
         return $this->update();
     }
 
-    public function create() {
+    public function create($user_id) {
         $statement = $this->db->prepare('
           INSERT INTO `vehicles` 
           (`model_year`, `make`, `model`, `color`, `license_plate_number`, `vin`, `user_id`)
@@ -100,7 +113,7 @@ class Vehicle
         $statement->bindParam(':color', $this->color);
         $statement->bindParam(':license_plate_number', $this->license_plate_number);
         $statement->bindParam(':vin', $this->vin);
-        $statement->bindValue(':user_id', 1);
+        $statement->bindValue(':user_id', $user_id);
 
         if ($statement->execute()) {
             return array(
@@ -136,6 +149,11 @@ class Vehicle
     }
 
     public function delete() {
+        if (!$this->isValidUser($user_id)) {
+            return array(
+                'success' => false
+            );
+        }
         $statement = $this->db->prepare('
             DELETE
             FROM `vehicles`
