@@ -425,6 +425,7 @@
                             value: part_name,
                             editing,
                             type: 'text',
+                            required: 'required',
                             errorMessage: errorMessages['part_name'],
                             onChange: this.onChange.bind(this)
                         }),
@@ -437,6 +438,7 @@
                             min: 0,
                             max: 100000,
                             step: 0.01,
+                            required: 'required',
                             errorMessage: errorMessages['price'],
                             onChange: this.onChange.bind(this)
                         }),
@@ -446,6 +448,7 @@
                             value: manufacturer,
                             editing,
                             type: 'text',
+                            required: 'required',
                             errorMessage: errorMessages['manufacturer'],
                             onChange: this.onChange.bind(this)
                         }),
@@ -455,6 +458,7 @@
                             value: vendor,
                             editing,
                             type: 'text',
+                            required: 'required',
                             errorMessage: errorMessages['vendor'],
                             onChange: this.onChange.bind(this)
                         }),
@@ -501,7 +505,7 @@
         }, '')
     };
 
-    const PartDetail = ({ title, field, value, editing, type, min, max, step, onChange, errorMessage }) => {
+    const PartDetail = ({ title, field, value, editing, type, min, max, step, required, onChange, errorMessage }) => {
         const errorSpan = errorMessage ? (
             h('span', { class: 'error' }, errorMessage)
         ) : null;
@@ -532,7 +536,7 @@
                 min,
                 step,
                 max,
-                required: 'required',
+                required,
                 onChange: e => onChange(field, e.target),});
         }
         return (
