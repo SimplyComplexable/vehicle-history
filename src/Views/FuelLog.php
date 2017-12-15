@@ -315,10 +315,9 @@
             volume,
         } = fuel;
         const formattedDate = formatDate(new Date(date));
-        const title = `on ${formattedDate}`;
         return (
             h('a', { id: 'col', href: `#ser-${fuel_id}`, 'data-toggle': 'collapse' },
-                h('div', { class: 'list-group-item fntbgr'}, [
+                h('div', { class: 'list-group-item fntbgr'}, !formattedDate ? null : [
                     h('span', { class: 'bolder' }, `${volume} gallons`),
                     ' at ',
                     h('span', { class: 'bolder' }, `${location}`),
@@ -591,7 +590,7 @@
             return (
                 h('div', null, [
                     h('button', { type: 'button', class: 'btn btn-success mb-3 mt-2 ml-4', onClick: () => handleEditFuel(fuel_id) }, 'Edit'),
-                    h('button', { class: 'btn btn-danger ml-2 mt-2 mb-3', onClick: () => handleDeleteFuel(fuel_id) }, 'Delete')
+                    h('button', { class: 'btn btn-danger mr-3 mt-2 mb-3 float-right', onClick: () => handleDeleteFuel(fuel_id) }, 'Delete')
                 ])
             )
         }

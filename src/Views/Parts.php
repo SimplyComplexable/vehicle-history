@@ -555,8 +555,8 @@
         } else {
             return (
                 h('div', null, [
-                    h('button', { type: 'button', class: 'btn btn-success mb-3 mt-2 ml-4', onClick: () => handleEditPart(part_id) }, 'Edit'),
-                    h('button', { class: 'btn btn-danger ml-2 mt-2 mb-3', onClick: () => handleDeletePart(part_id) }, 'Delete')
+                    h('button', { type: 'button', class: 'btn btn-success mb-3 mt-2 ml-3', onClick: () => handleEditPart(part_id) }, 'Edit'),
+                    h('button', { class: 'btn btn-danger mr-3 mt-2 mb-3 float-right', onClick: () => handleDeletePart(part_id) }, 'Delete')
                 ])
             )
         }

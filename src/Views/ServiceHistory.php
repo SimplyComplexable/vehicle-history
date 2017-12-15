@@ -582,7 +582,7 @@
             return (
                 h('div', null, [
                     h('button', { type: 'button', class: 'btn btn-success mb-3 mt-2 ml-4', onClick: () => handleEditService(service_id) }, 'Edit'),
-                    h('button', { class: 'btn btn-danger ml-2 mt-2 mb-3', onClick: () => handleDeleteService(service_id) }, 'Delete')
+                    h('button', { class: 'btn btn-danger mr-3 mt-2 mb-3 float-right', onClick: () => handleDeleteService(service_id) }, 'Delete')
                 ])
             )
         }
