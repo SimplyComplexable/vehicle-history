@@ -60,7 +60,7 @@
 <nav class='navbar navbar-expand-xl navbar-dark bg-primary sticky-top'>
     <a href='./' class='display-4 navbar-brand ml-2' style='font-size: 1.7em;'>Vehicle Service History Tracking System</a>
     <div class='float-right text-right'>
-        <a class="btn btn-primary mx-2 my-sm-0" href="..">Vehicles</a>
+        <a class="btn btn-primary mx-2 my-sm-0" href="..?token=<?php echo $token ?>">Vehicles</a>
         <a class="btn btn-primary mr-2 my-sm-0" href="./history">Service History</a>
         <a class="btn btn-primary mr-2 my-sm-0" href="./fuel">Fuel Log</a>
         <a class="btn btn-primary mr-2 my-sm-0 active" href="./parts">Parts</a>
@@ -131,6 +131,7 @@
             return {
                 part_id: '',
                 part_name: '',
+                date: '',
                 price: '',
                 manufacturer: '',
                 vendor: '',
@@ -331,6 +332,7 @@
                 errorMessages: {
                     part_id: '',
                     part_name: '',
+                    date: '',
                     price: '',
                     manufacturer: '',
                     vendor: '',
@@ -408,6 +410,7 @@
                 part_id,
                 part_name,
                 price,
+                date,
                 manufacturer,
                 vendor,
                 notes,
@@ -430,11 +433,21 @@
                             onChange: this.onChange.bind(this)
                         }),
                         h(PartDetail, {
+                            title: 'Date',
+                            field: 'date',
+                            value: date,
+                            editing,
+                            type: 'date',
+                            required: 'required',
+                            errorMessage: errorMessages['date'],
+                            onChange: this.onChange.bind(this)
+                        }),
+                        h(PartDetail, {
                             title: 'Cost',
                             field: 'price',
                             value: price,
                             editing,
-                            type: 'number',
+                            type: 'money',
                             min: 0,
                             max: 100000,
                             step: 0.01,
@@ -497,12 +510,13 @@
     };
 
     const formatNumber = number => {
-        return number.split('').reverse().reduce((next, n, i) => {
+        const parts = number.split('.');
+        return parts[0].split('').reverse().reduce((next, n, i) => {
             if (i !== 0 && i % 3 === 0) {
                 return n + ',' + next;
             }
             return n + next;
-        }, '')
+        }, '') + '.' + (parts[1] ? parts[1] : null);
     };
 
     const PartDetail = ({ title, field, value, editing, type, min, max, step, required, onChange, errorMessage }) => {
@@ -517,7 +531,7 @@
                 formattedValue = formatDate(value);
                 break;
             case 'money':
-                formattedValue = `$${value}`;
+                formattedValue = `$${formatNumber(value)}`;
                 type = 'number';
                 break;
             case 'number':

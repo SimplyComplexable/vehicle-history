@@ -28,8 +28,10 @@ class User
         $user = $this->getUserInfo($username);
         if(!$user)
             return false;
-        password_verify($password, $user['password']);
-        return $this->buildToken($user['user_id'], $username);
+        if (password_verify($password, $user['password'])) {
+            return $this->buildToken($user['user_id'], $username);
+        }
+        return false;
     }
 
     public function register($username, $password) {

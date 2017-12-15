@@ -16,6 +16,9 @@
             margin-top: 1.2em;
             font-weight: 400;
         }
+        .error {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -29,6 +32,9 @@
         <div class="row justify-content-md-center mb-4">
             <div class='mt-4 col-md-5 border-rnd mr-4 px-5 py-5'>
                 <h1 class="mb-4">Register</h1>
+                <?php if ($registerError) { ?>
+                    <h5 class="error">Invalid information provided. Please try again.</h5>
+                <?php } ?>
                 <form method="post" action="./register">
                     <div class="form-group">
                         <input type="text" class="form-control form-control-lg mb-2" placeholder="Username" name="username">
@@ -48,6 +54,9 @@
             </div>
             <div class='mt-4 col-md-5 border-rnd ml-4 px-5 py-5'>
                 <h1 class="mb-4">Login</h1>
+                <?php if ($loginError) { ?>
+                    <h5 class="error">Invalid credentials provided. Please try again.</h5>
+                <?php } ?>
                 <form method="post" action="./login">
                     <div class="form-group">
                         <input type="text" class="form-control form-control-lg mb-2" placeholder="Username" name="username">

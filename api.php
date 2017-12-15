@@ -233,6 +233,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         if($token !== false) {
             header('Location: https://icarus.cs.weber.edu'.$baseURI.'/vehicles?token='.$token);
         }
+        $controller->setLoginError(true);
         return $controller->httpResponse();
     };
 
@@ -241,6 +242,7 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r)  
         if($controller->register($_POST)) {
             header('Location: https://icarus.cs.weber.edu'.$baseURI.'/vehicles');
         }
+        $controller->setRegisterError(true);
         return $controller->httpResponse();
     };
 

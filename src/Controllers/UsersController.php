@@ -14,6 +14,17 @@ class UsersController extends Controller
 {
     protected $viewFileName = 'LoginRegister';
 
+    private $loginError = false;
+    private $registerError = false;
+
+    public function setLoginError(bool $loginError) {
+        $this->loginError = $loginError;
+    }
+
+    public function setRegisterError(bool $registerError) {
+        $this->registerError = $registerError;
+    }
+
     public function login($data) {
         if(array_key_exists('username', $data) && array_key_exists('password', $data)) {
             $u = new User();
@@ -33,5 +44,12 @@ class UsersController extends Controller
             return $u->register($username, $password);
         }
         return false;
+    }
+
+    protected function beforeRender() {
+        $this->setVars(array(
+            'loginError' => $this->loginError,
+            'registerError' => $this->registerError
+        ));
     }
 }
