@@ -88,15 +88,15 @@ class Vehicle
     }
 
     public function save($user_id) {
+        if ($this->vehicle_id === null || $this->vehicle_id === '') {
+            return $this->create($user_id);
+        }
+
         if (!$this->isValidUser($user_id)) {
             return array(
                 'success' => false
             );
         }
-        if ($this->vehicle_id === null || $this->vehicle_id === '') {
-            return $this->create($user_id);
-        }
-
         return $this->update();
     }
 
