@@ -14,7 +14,6 @@ class Part
 {
     private $part_id;
     private $part_name;
-    private $part_number;
     private $price;
     private $manufacturer;  // who makes the part
     private $vendor;        // who the part was purchased from
@@ -48,11 +47,10 @@ class Part
         }
     }
 
-    private function constructWithValues($part_id, $part_name, $part_number, $price, $manufacturer, $vendor, $notes, $vehicle_id)
+    private function constructWithValues($part_id, $part_name, $price, $manufacturer, $vendor, $notes, $vehicle_id)
     {
         $this->part_id = $part_id;
         $this->part_name = $part_name;
-        $this->part_number = $part_number;
         $this->price = $price;
         $this->manufacturer = $manufacturer;
         $this->vendor = $vendor;
@@ -109,13 +107,12 @@ class Part
 
     public function create() {
         $statement = $this->db->prepare('
-          INSERT INTO `fuel` 
-          (`part_name`, `part_number`, `price`, `manufacturer`, `vendor`, `notes`, `vehicle_id`)
+          INSERT INTO `part` 
+          (`part_name`, `price`, `manufacturer`, `vendor`, `notes`, `vehicle_id`)
           VALUES
-          (:part_name, :part_number, :price, :manufacturer, :vendor, :notes, :vehicle_id)
+          (:part_name, :price, :manufacturer, :vendor, :notes, :vehicle_id)
         ');
         $statement->bindParam(':part_name', $this->part_name);
-        $statement->bindParam(':part_number', $this->part_number);
         $statement->bindParam(':price', $this->price);
         $statement->bindParam(':manufacturer', $this->manufacturer);
         $statement->bindParam(':vendor', $this->vendor);
@@ -134,18 +131,16 @@ class Part
         $statement = $this->db->prepare('
               UPDATE `part` 
               SET 
-              `part_name` = :part_name
-              `part_number` = :part_number
-              `price` = :price
-              `manufacturer` = :manufacturer
-              `vendor` = :vendor
-              `notes` = :notes
+              `part_name` = :part_name,
+              `price` = :price,
+              `manufacturer` = :manufacturer,
+              `vendor` = :vendor,
+              `notes` = :notes,
               `vehicle_id` = :vehicle_id
               WHERE `part_id` = :part_id
           ');
 
         $statement->bindParam(':part_name', $this->part_name);
-        $statement->bindParam(':part_number', $this->part_number);
         $statement->bindParam(':price', $this->price);
         $statement->bindParam(':manufacturer', $this->manufacturer);
         $statement->bindParam(':vendor', $this->vendor);
