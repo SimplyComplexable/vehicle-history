@@ -31,7 +31,7 @@ class ServiceHistoryController extends Controller
             $vehicle->set($key, $value);
         }
 
-        return $vehicle->save();
+        return $vehicle->save($user_id);
     }
 
     public function updateService($user_id, int $id, array $updates) {
@@ -39,12 +39,12 @@ class ServiceHistoryController extends Controller
         foreach($updates as $key => $value) {
             $service->set($key, $value);
         }
-        return $service->save();
+        return $service->save($user_id);
     }
 
     public function deleteService($user_id, int $id) {
         $service = new Service($id);
-        return $service->delete();
+        return $service->delete($user_id);
     }
 
     protected function beforeRender() {

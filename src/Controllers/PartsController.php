@@ -31,7 +31,7 @@ class PartsController extends Controller
             $part->set($key, $value);
         }
 
-        return $part->save();
+        return $part->save($user_id);
     }
 
     public function updatePart($user_id, int $id, array $updates) {
@@ -39,12 +39,12 @@ class PartsController extends Controller
         foreach($updates as $key => $value) {
             $part->set($key, $value);
         }
-        return $part->save();
+        return $part->save($user_id);
     }
 
     public function deletePart($user_id, int $id) {
         $part = new Part($id);
-        return $part->delete();
+        return $part->delete($user_id);
     }
 
     protected function beforeRender() {

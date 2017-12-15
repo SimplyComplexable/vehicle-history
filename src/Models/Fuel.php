@@ -62,6 +62,15 @@ class Fuel
         $this->db = DatabaseConnection::getInstance();
     }
 
+    private function isValidUser($user_id) {
+        $statement = $this->db->prepare('SELECT `user_id` from `fuel` WHERE `fuel_id` = :fuel_id');
+        $statement->bindParam(':fuel_id', $this->fuel_id);
+        $statement->setFetchMode(\PDO::FETCH_ASSOC);
+        $statement->execute();
+        $response = $statement->fetch();
+        return $response['user_id'] === $user_id;
+    }
+
     public static function getAllForVehicle($vehicle_id): array {
         $db = DatabaseConnection::getInstance();
         $statement = $db->prepare('SELECT * FROM `fuel` WHERE `vehicle_id` = :vehicle_id');
@@ -78,9 +87,14 @@ class Fuel
         }
     }
 
-    public function save() {
+    public function save($user_id) {
+        if (!$this->isValidUser($user_id)) {
+            return array(
+                'success' => false
+            );
+        }
         if ($this->fuel_id === null || $this->fuel_id === '') {
-            return $this->create();
+            return $this->create($user_id);
         }
         return $this->update();
     }
@@ -139,7 +153,12 @@ class Fuel
         );
     }
 
-    public function delete() {
+    public function delete($user_id) {
+        if (!$this->isValidUser($user_id)) {
+            return array(
+                'success' => false
+            );
+        }
         $statement = $this->db->prepare('
             DELETE
             FROM `fuel`

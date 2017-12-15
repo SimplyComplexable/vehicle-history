@@ -62,10 +62,19 @@ class Service
         $this->db = DatabaseConnection::getInstance();
     }
 
+    private function isValidUser($user_id) {
+        $statement = $this->db->prepare('SELECT `user_id` from `service` WHERE `service_id` = :service_id');
+        $statement->bindParam(':vehicle_id', $this->vehicle_id);
+        $statement->setFetchMode(\PDO::FETCH_ASSOC);
+        $statement->execute();
+        $response = $statement->fetch();
+        return $response['user_id'] === $user_id;
+    }
+
     public static function getAllForVehicle($vehicle_id): array {
         $db = DatabaseConnection::getInstance();
-        $statement = $db->prepare('SELECT * FROM `service` WHERE `vehicle_id` = :vehicle_id');
-        $statement->bindParam(':vehicle_id', $vehicle_id);
+        $statement = $db->prepare('SELECT * FROM `service` WHERE `service_id` = :service_id');
+        $statement->bindParam(':service_id', service_idœ);
         $statement->setFetchMode(\PDO::FETCH_ASSOC);
 
         $statement->execute();
@@ -78,9 +87,14 @@ class Service
         }
     }
 
-    public function save() {
+    public function save($user_id) {
+        if (!$this->isValidUser($user_id)) {
+            return array(
+                'success' => false
+            );
+        }
         if ($this->service_id === null || $this->service_id === '') {
-            return $this->create();
+            return $this->create($user_id);
         }
         return $this->update();
     }
@@ -135,7 +149,12 @@ class Service
         );
     }
 
-    public function delete() {
+    public function delete($user_id) {
+        if (!$this->isValidUser($user_id)) {
+            return array(
+                'success' => false
+            );
+        }
         $statement = $this->db->prepare('
             DELETE
             FROM `service`

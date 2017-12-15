@@ -64,6 +64,15 @@ class Part
         $this->db = DatabaseConnection::getInstance();
     }
 
+    private function isValidUser($user_id) {
+        $statement = $this->db->prepare('SELECT `user_id` from `part` WHERE `part_id` = :part_id');
+        $statement->bindParam(':part_id', $this->part_id);
+        $statement->setFetchMode(\PDO::FETCH_ASSOC);
+        $statement->execute();
+        $response = $statement->fetch();
+        return $response['user_id'] === $user_id;
+    }
+
 
     public static function getAllForVehicle($vehicle_id): array {
         $db = DatabaseConnection::getInstance();
@@ -81,9 +90,14 @@ class Part
         }
     }
 
-    public function save() {
+    public function save($user_id) {
+        if (!$this->isValidUser($user_id)) {
+            return array(
+                'success' => false
+            );
+        }
         if ($this->part_id === null || $this->part_id === '') {
-            return $this->create();
+            return $this->create($user_id);
         }
         return $this->update();
     }
@@ -139,7 +153,12 @@ class Part
         );
     }
 
-    public function delete() {
+    public function delete($user_id) {
+        if (!$this->isValidUser($user_id)) {
+            return array(
+                'success' => false
+            );
+        }
         $statement = $this->db->prepare('
             DELETE
             FROM `part`
