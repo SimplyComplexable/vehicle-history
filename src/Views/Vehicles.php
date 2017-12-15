@@ -90,7 +90,6 @@
         const headerConfig = Object.assign({}, config || {}, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        console.log(headerConfig);
         return fetch(uri, headerConfig);
     };
 
@@ -115,7 +114,6 @@
     };
 
     const addVehicle = (data) => {
-        console.log(data);
         return fetchWithToken(`${apiURI}`, {
             method: 'POST',
             body: JSON.stringify(data)

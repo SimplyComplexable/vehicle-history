@@ -88,12 +88,12 @@
         return token;
     };
 
-    const fetchWithToken = uri => {
+    const fetchWithToken = (uri, config = null) => {
         const token = getToken();
-        const config = {
-            headers: { 'Authorization': `Bearer: ${token}` }
-        };
-        return fetch(uri, config);
+        const headerConfig = Object.assign({}, config || {}, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        return fetch(uri, headerConfig);
     };
 
     const getFuels = () => {
