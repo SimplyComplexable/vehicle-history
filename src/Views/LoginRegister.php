@@ -32,9 +32,6 @@
         <div class="row justify-content-md-center mb-4">
             <div class='mt-4 col-md-5 border-rnd mr-4 px-5 py-5'>
                 <h1 class="mb-4">Register</h1>
-                <?php if ($registerError) { ?>
-                    <h5 class="error">Invalid information provided. Please try again.</h5>
-                <?php } ?>
                 <form method="post" action="./register">
                     <div class="form-group">
                         <input type="text" class="form-control form-control-lg mb-2" placeholder="Username" name="username">
@@ -43,6 +40,9 @@
                         <div class="ml-2 col-md-13">
                             <p>* Passwords must be 8 characters long, contain one uppercase, one lowercase letter and one number.</p>
                         </div>
+                        <?php if ($registerError) { ?>
+                            <h5 class="error">Invalid information provided. Please try again.</h5>
+                        <?php } ?>
                     </div>
                     <div class="form-group">
                         <input type="submit" class="btn btn-lg btn-success mt-3" value="Register">
@@ -54,14 +54,14 @@
             </div>
             <div class='mt-4 col-md-5 border-rnd ml-4 px-5 py-5'>
                 <h1 class="mb-4">Login</h1>
-                <?php if ($loginError) { ?>
-                    <h5 class="error">Invalid credentials provided. Please try again.</h5>
-                <?php } ?>
                 <form method="post" action="./login">
                     <div class="form-group">
                         <input type="text" class="form-control form-control-lg mb-2" placeholder="Username" name="username">
                         <input type="password" class="form-control form-control-lg mb-2" placeholder="Password" name="password">
                     </div>
+                    <?php if ($loginError) { ?>
+                        <h5 class="error">Invalid credentials provided. Please try again.</h5>
+                    <?php } ?>
                     <div class="form-group">
                         <input type="submit" class="btn btn-lg btn-success mt-3" value="Login">
                     </div>
