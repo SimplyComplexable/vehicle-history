@@ -256,7 +256,7 @@
                             onClick: this.handleToggleNewPart.bind(this)
                         }, newPart === null ? 'Add Part' : 'Cancel')
                     ),
-                    h('h1', { style: { fontWeight: 400 }}, 'Parts for '),
+                    h('h1', { style: { fontWeight: 400 }}, 'Parts used on your '),
                     h('h2', { style: { fontWeight: 600 }}, '<?php echo $vehicle_title ?>'),
                     h('hr'),
                     h('div', { class: '' },
