@@ -517,7 +517,7 @@
                 return n + ',' + next;
             }
             return n + next;
-        }, '') + '.' + (parts[1] ? parts[1] : '');
+        }, '') + '.' + (parts[1] !== undefined ? parts[1] : '00');
     };
 
     const PartDetail = ({ title, field, value, editing, type, min, max, step, required, onChange, errorMessage }) => {

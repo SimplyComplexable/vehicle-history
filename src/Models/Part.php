@@ -14,6 +14,7 @@ class Part
 {
     private $part_id;
     private $part_name;
+    private $date;
     private $price;
     private $manufacturer;  // who makes the part
     private $vendor;        // who the part was purchased from
@@ -108,11 +109,12 @@ class Part
     public function create() {
         $statement = $this->db->prepare('
           INSERT INTO `part` 
-          (`part_name`, `price`, `manufacturer`, `vendor`, `notes`, `vehicle_id`)
+          (`part_name`, `price`, `date`, `manufacturer`, `vendor`, `notes`, `vehicle_id`)
           VALUES
-          (:part_name, :price, :manufacturer, :vendor, :notes, :vehicle_id)
+          (:part_name, :price, :date, :manufacturer, :vendor, :notes, :vehicle_id)
         ');
         $statement->bindParam(':part_name', $this->part_name);
+        $statement->bindParam(':date', $this->date);
         $statement->bindParam(':price', $this->price);
         $statement->bindParam(':manufacturer', $this->manufacturer);
         $statement->bindParam(':vendor', $this->vendor);
@@ -132,6 +134,7 @@ class Part
               UPDATE `part` 
               SET 
               `part_name` = :part_name,
+              `date` = :date,
               `price` = :price,
               `manufacturer` = :manufacturer,
               `vendor` = :vendor,
@@ -141,6 +144,7 @@ class Part
           ');
 
         $statement->bindParam(':part_name', $this->part_name);
+        $statement->bindParam(':date', $this->date);
         $statement->bindParam(':price', $this->price);
         $statement->bindParam(':manufacturer', $this->manufacturer);
         $statement->bindParam(':vendor', $this->vendor);
