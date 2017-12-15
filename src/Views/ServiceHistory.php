@@ -487,7 +487,7 @@
                             value: cost,
                             editing,
                             type: 'money',
-                            min: '0.01',
+                            min: '0.00',
                             step: '0.01',
                             max: '100000',
                             errorMessage: errorMessages['cost'],
