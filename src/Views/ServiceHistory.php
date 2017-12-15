@@ -56,10 +56,10 @@
 <nav class='navbar navbar-expand-xl navbar-dark bg-primary sticky-top'>
     <a href='./' class='display-4 navbar-brand ml-2' style='font-size: 1.7em;'>Vehicle Service History Tracking System</a>
     <div class='float-right text-right'>
-        <a class="btn btn-primary mx-2 my-sm-0" href="..">Vehicles</a>
-        <a class="btn btn-primary mr-2 my-sm-0 active" href="./history">Service History</a>
-        <a class="btn btn-primary mr-2 my-sm-0" href="./fuel">Fuel Log</a>
-        <a class="btn btn-primary mr-2 my-sm-0" href="./parts">Parts</a>
+        <a class="btn btn-primary mx-2 my-sm-0" href="..?token=<?php echo $token ?>">Vehicles</a>
+<!--        <a class="btn btn-primary mr-2 my-sm-0 active" href="./history">Service History</a>-->
+<!--        <a class="btn btn-primary mr-2 my-sm-0" href="./fuel">Fuel Log</a>-->
+<!--        <a class="btn btn-primary mr-2 my-sm-0" href="./parts">Parts</a>-->
     </div>
 </nav>
 <div id="services"></div>
