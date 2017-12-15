@@ -28,7 +28,7 @@
         const nav = document.querySelector('.navbar .float-right');
         nav.innerHTML = `
             <div class='float-right text-right'>
-                <a class="text-light btn btn-primary mr-2 my-sm-0" href="./vehicles?token=${token}">Vehicles</a>
+                <a class="text-light btn btn-primary mr-2 my-sm-0" href="./vehicles/?token=${token}">Vehicles</a>
             </div>
         `;
     }
