@@ -48,7 +48,7 @@ class ServiceHistoryController extends Controller
     }
 
     protected function beforeRender() {
-        $token = $this->getToken();
+        $userData = $this->getToken();
 
         $service = new Vehicle($this->vehicle_id);
         $this->setVars(array(

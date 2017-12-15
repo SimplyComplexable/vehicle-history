@@ -72,7 +72,10 @@ class Controller {
             return false;
         }
 
-        return $_GET['token'];
+        return array(
+            'token' => $_GET['token'],
+            'id' => Token::getIDFromToken($_GET['token'])
+        );
     }
 
     /**

@@ -23,7 +23,7 @@ class VehicleController extends Controller
             $vehicle->set($key, $value);
         }
 
-        return $vehicle->save();
+        return $vehicle->save($user_id);
     }
 
     public function updateVehicle($user_id, int $id, array $updates) {
@@ -36,17 +36,17 @@ class VehicleController extends Controller
 
     public function deleteVehicle($user_id, int $id) {
         $vehicle = new Vehicle($id);
-        return $vehicle->delete();
+        return $vehicle->delete($user_id);
     }
 
     //override Component function which gets called before the page is rendered
     protected function beforeRender() {
-        $token = $this->getToken();
+        $userData = $this->getToken();
         //set view variables with this function
         //key will be the variables name
         $this->setVars(array(
-            'vehicles' => Vehicle::getAll(),
-            'token' => $token
+            'vehicles' => Vehicle::getAll($userData['id']),
+            'token' => $userData['token']
         ));
     }
 }

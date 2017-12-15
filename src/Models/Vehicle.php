@@ -148,7 +148,7 @@ class Vehicle
         );
     }
 
-    public function delete() {
+    public function delete($user_id) {
         if (!$this->isValidUser($user_id)) {
             return array(
                 'success' => false
